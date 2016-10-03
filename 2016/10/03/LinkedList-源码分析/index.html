@@ -1,0 +1,907 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="LinkedList," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="LinkedListLinkedList是List接口的一个实现类，内部是基于一个双向链表实现的。支持添加，移除，替换三种操作。同时，LinkedList中的元素可以是任意类型的，包括null。当需要队列一样的数据操作的时候使用LinkedList是很有用的。
+先来看看LinkedList的继承结构：
+
+AbstractCollection
+AbstractList
+AbstractSequent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LinkedList 源码分析">
+<meta property="og:url" content="dooogo.github.io/2016/10/03/LinkedList-源码分析/index.html">
+<meta property="og:site_name" content="Doo的主页">
+<meta property="og:description" content="LinkedListLinkedList是List接口的一个实现类，内部是基于一个双向链表实现的。支持添加，移除，替换三种操作。同时，LinkedList中的元素可以是任意类型的，包括null。当需要队列一样的数据操作的时候使用LinkedList是很有用的。
+先来看看LinkedList的继承结构：
+
+AbstractCollection
+AbstractList
+AbstractSequent">
+<meta property="og:updated_time" content="2016-10-03T05:44:40.210Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LinkedList 源码分析">
+<meta name="twitter:description" content="LinkedListLinkedList是List接口的一个实现类，内部是基于一个双向链表实现的。支持添加，移除，替换三种操作。同时，LinkedList中的元素可以是任意类型的，包括null。当需要队列一样的数据操作的时候使用LinkedList是很有用的。
+先来看看LinkedList的继承结构：
+
+AbstractCollection
+AbstractList
+AbstractSequent">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> LinkedList 源码分析 | Doo的主页 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a393584c41c219603e4e068220d7084f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Doo的主页</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                LinkedList 源码分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-03T13:43:49+08:00" content="2016-10-03">
+              2016-10-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/03/LinkedList-源码分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/03/LinkedList-源码分析/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p><strong>LinkedList是List接口的一个实现类，内部是基于一个双向链表实现的。支持添加，移除，替换三种操作。</strong><br><strong>同时，LinkedList中的元素可以是任意类型的，包括null。当需要队列一样的数据操作的时候使用LinkedList是很有用的。</strong></p>
+<p>先来看看LinkedList的继承结构：</p>
+<blockquote>
+<p>AbstractCollection</p>
+<p>AbstractList</p>
+<p>AbstractSequentialList</p>
+<p>LinkedList</p>
+</blockquote>
+<p>此外LinkedList还直接实现了一下的接口：</p>
+<p>List<e>, Deque<e>, Queue<e>, Cloneable, Serializable</e></e></e></p>
+<p>List接口在之前额ArrayList分析中已近讲过了。这里就不赘述了。下面主要看看Deque<e>, Queue<e>这两个接口。</e></e></p>
+<p><strong>Queue</strong></p>
+<p>Queue被设计用来做预先处理的收集器。它除了有继承子Collection的功能实现外，还有插入，删除，查找三个操作。<br>并且这三个操作都有对应的两种类型的实现方法。一种会抛出异常，另一种则是返回一个指定的值。在插入操作还会有容量限制，没有容量限制的话能保证插入不会失败。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>boolean add(E e)</td>
+<td>添加一个元素到队列的末尾，如果队列使用容量限制的话，插入成功，返回true，有容量限制且容量已满则否则抛出异常</td>
+</tr>
+<tr>
+<td>boolean offer(E e)</td>
+<td>无容量限制则直接插入队列末尾，返回true，否则调用add()进行插入，有异常返回false</td>
+</tr>
+<tr>
+<td>E remove()</td>
+<td>从队列的首部移除一个元素，并返回该元素。队列已空则抛出异常。</td>
+</tr>
+<tr>
+<td>E poll()</td>
+<td>从队列的首部移除一个元素，并返回该元素。队列已空则返回null。</td>
+</tr>
+<tr>
+<td>E element()</td>
+<td>返回队列的末尾的元素，不执行删除操作。队列已空则抛出异常。</td>
+</tr>
+<tr>
+<td>E peek()</td>
+<td>返回队列的末尾的元素，不执行删除操作。队列已空则返回null。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Deque</strong>(其实是双向队列的缩写)</p>
+<p>继承自Queue。</p>
+<p>Deque是一个线性收集器，支持从开头或者结尾添加或者删除元素。Deque的实现类基本都不加入容量限制，但是保留有这个功能。Deque支持的操作有添加，移除，检索元素。每种操作都有两种类型，一种是操作失败直接抛出异常，另一种是返回一个指定的值。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>void addFirst(E e)</td>
+<td>队列没有容量限制的话，将元素加入到队列首部。否则抛出异常</td>
+</tr>
+<tr>
+<td>void addLast(E e)</td>
+<td>队列没有容量限制的话，将元素加入到队列末尾。否则抛出异常</td>
+</tr>
+<tr>
+<td>boolean offerFirst(E e)</td>
+<td>队列没有容量限制的话，将元素加入到队列首部,返回true。否则则去调用addFirst()，如抛出异常则返回false</td>
+</tr>
+<tr>
+<td>boolean offferLast(E e)</td>
+<td>队列没有容量限制的话，将元素加入到队列末尾,返回true。否则则去调用addLast()，如抛出异常则返回false</td>
+</tr>
+<tr>
+<td>E removeFirst()</td>
+<td>移除队列第一个元素，如果队列为空则抛出异常</td>
+</tr>
+<tr>
+<td>E removeLast()</td>
+<td>移除队列最后一个元素，如果队列为空则抛出异常</td>
+</tr>
+<tr>
+<td>E pollFirst()</td>
+<td>移除队列第一个元素，如果队列为空则返回null</td>
+</tr>
+<tr>
+<td>E pollLast()</td>
+<td>移除队列最后一个元素，如果队列为经为空则返回null</td>
+</tr>
+<tr>
+<td>E getFirst()</td>
+<td>获取但是不删除第一个元素，队列为空则抛出异常</td>
+</tr>
+<tr>
+<td>E getLast()</td>
+<td>获取但是不删除最后一个元素，队列为空则抛出异常</td>
+</tr>
+<tr>
+<td>E peekFirst()</td>
+<td>获取但是不删除第一个元素，队列为空则返回null</td>
+</tr>
+<tr>
+<td>E peekLast()</td>
+<td>获取但是不删除最后一个元素，队列为空则返回null</td>
+</tr>
+</tbody>
+</table>
+<p>在Deque和Queue中可能抛出的异常有：<br>IllegalStateException，ClassCastException，NullPointerException，IllegalArgumentException</p>
+<p><strong>LinkedList</strong></p>
+<p>先来看看它的一个内部静态类。<br>实际上是对数据的封装，以及加上它的前后元素的引用。其实和C语言中的链表的指针的意思是一样的。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> Link&lt;ET&gt; &#123;</span><br><span class="line">    ET data;　<span class="comment">//封装的数据元素</span></span><br><span class="line"></span><br><span class="line">    Link&lt;ET&gt; <span class="keyword">previous</span>, <span class="keyword">next</span>;<span class="comment">//该元素指向它的前后元素的引用。</span></span><br><span class="line"></span><br><span class="line">    Link(ET o, Link&lt;ET&gt; p, Link&lt;ET&gt; n) &#123;</span><br><span class="line">        data = o;<span class="comment">//我们使用LinkedList的时候装载的数据对象本身。</span></span><br><span class="line">        <span class="keyword">previous</span> = p;</span><br><span class="line">        <span class="keyword">next</span> = n;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内部还有两个迭代器内部类：</p>
+<ul>
+<li>LinkIterator</li>
+<li>ReverseLinkIterator</li>
+</ul>
+<p>我们看看LinkIterator的内部实现：</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Link&lt;ET&gt; link, lastLink;<span class="comment">//link当前元素，lastLink最后一次访问到元素</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//从指定位置开始迭代</span></span><br><span class="line">LinkIterator(LinkedList&lt;ET&gt; object, int <span class="built_in">location</span>) &#123;</span><br><span class="line">    <span class="built_in">list</span> = object;<span class="comment">//队列本身</span></span><br><span class="line">    <span class="comment">//得到原list中的操作记数。后续对list的操作都会使用到，判别是否存在并发操作</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">location</span> &gt;= <span class="number">0</span> &amp;&amp; <span class="built_in">location</span> &lt;= <span class="built_in">list</span>.<span class="built_in">size</span>) &#123;</span><br><span class="line">    expectedModCount = <span class="built_in">list</span>.modCount;</span><br><span class="line">        link = <span class="built_in">list</span>.voidLink;</span><br><span class="line">        <span class="comment">//查找的优化，根据索引位置与list的size比较，从头向尾，还是从末尾向开头开始寻找指定位置的元素</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">location</span> &lt; <span class="built_in">list</span>.<span class="built_in">size</span> / <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (pos = -<span class="number">1</span>; pos + <span class="number">1</span> &lt; <span class="built_in">location</span>; pos++) &#123;</span><br><span class="line">                link = link.next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (pos = <span class="built_in">list</span>.<span class="built_in">size</span>; pos &gt;= <span class="built_in">location</span>; pos--) &#123;</span><br><span class="line">                link = link.previous;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> new IndexOutOfBoundsException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>设置元素</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public void <span class="keyword">set</span>(ET <span class="comment">object) &#123;</span></span><br><span class="line">    ...</span><br><span class="line">      <span class="comment">//lastLink就是最后一个访问到的元素  </span></span><br><span class="line">        lastLink.data <span class="comment">= object</span>;</span><br><span class="line">    ...  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>添加元素</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="literal">void</span> add(ET object) &#123;</span><br><span class="line">    <span class="keyword">if</span> (expectedModCount == <span class="built_in">list</span>.modCount) &#123;</span><br><span class="line">        <span class="keyword">Link</span>&lt;ET&gt; next = <span class="keyword">link</span>.next;<span class="comment">//当前元素的下一个元素</span></span><br><span class="line">        <span class="keyword">Link</span>&lt;ET&gt; newLink = <span class="literal">new</span> <span class="keyword">Link</span>&lt;ET&gt;(object, <span class="keyword">link</span>, next);<span class="comment">//将新添加的数据封装</span></span><br><span class="line">        <span class="keyword">link</span>.next = newLink;<span class="comment">//link.next指向新元素</span></span><br><span class="line">        next.previous = newLink;<span class="comment">//当前元素的下一个元素的previous指向新元素</span></span><br><span class="line">        <span class="keyword">link</span> = newLink;<span class="comment">//当前的节点更新为新加入的节点</span></span><br><span class="line">        lastLink = <span class="built_in">null</span>;<span class="comment">//最后访问的节点置为空</span></span><br><span class="line">        pos++;<span class="comment">//这实际是新添加元素的节点位置索引值</span></span><br><span class="line">        <span class="comment">//同时自加LinkedList中的操作次数和迭代器中的操作次数，不然肯定会报异常，因为每次</span></span><br><span class="line">        <span class="comment">//对list的操作都会检查这两个值是否相等。</span></span><br><span class="line">        expectedModCount++;</span><br><span class="line">        <span class="built_in">list</span>.modCount++;</span><br><span class="line">        <span class="built_in">list</span>.size++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        throw <span class="literal">new</span> ConcurrentModificationException();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">boolean</span> hasNext() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">link</span>.next != <span class="built_in">list</span>.voidLink;<span class="comment">//判断一个节点的next域是否指向null，null就说明到末尾了</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//link为空值说明没有前继几点啦，用link.previous != null,可能link==null时，link.previous会报空指针异常。</span></span><br><span class="line"><span class="keyword">public</span> <span class="built_in">boolean</span> hasPrevious() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">link</span> != <span class="built_in">list</span>.voidLink;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> ET next() &#123;</span><br><span class="line">    <span class="keyword">if</span> (expectedModCount == <span class="built_in">list</span>.modCount) &#123;</span><br><span class="line">        LinkedList.<span class="keyword">Link</span>&lt;ET&gt; next = <span class="keyword">link</span>.next;<span class="comment">//当前元素的下一个元素</span></span><br><span class="line">        <span class="keyword">if</span> (next != <span class="built_in">list</span>.voidLink) &#123;</span><br><span class="line">            lastLink = <span class="keyword">link</span> = next;<span class="comment">//同时将保存当前节点和最后访问的节点更新为刚得到的下一个元素</span></span><br><span class="line">            pos++;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">link</span>.<span class="built_in">data</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        throw <span class="literal">new</span> NoSuchElementException();<span class="comment">//已到达末尾是调用next，会抛异常</span></span><br><span class="line">    &#125;</span><br><span class="line">    throw <span class="literal">new</span> ConcurrentModificationException();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> ET previous() &#123;</span><br><span class="line">      <span class="attr">...</span></span><br><span class="line">        lastLink = <span class="keyword">link</span>;</span><br><span class="line">        <span class="keyword">link</span> = <span class="keyword">link</span>.previous;<span class="comment">//直接从保存当前节点信息的link的previous域获得前继节点</span></span><br><span class="line">        pos--;</span><br><span class="line">        <span class="keyword">return</span> lastLink.<span class="built_in">data</span>;</span><br><span class="line">      <span class="attr">...</span>.</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//其实就是add的逆操作，需要注意的是remove操作是将最后访问到的节点删除的，也就是lastLink</span></span><br><span class="line"><span class="keyword">public</span> <span class="literal">void</span> remove() &#123;</span><br><span class="line">    <span class="attr">...</span></span><br><span class="line">        <span class="keyword">Link</span>&lt;ET&gt; next = lastLink.next;</span><br><span class="line">        <span class="keyword">Link</span>&lt;ET&gt; previous = lastLink.previous;</span><br><span class="line">        next.previous = previous;</span><br><span class="line">        previous.next = next;</span><br><span class="line">        <span class="comment">//当前节点与最后访问的节点指向同意元素，next()或者previous()后，该条件为true</span></span><br><span class="line">        <span class="keyword">if</span> (lastLink == <span class="keyword">link</span>) &#123;</span><br><span class="line">            pos--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">link</span> = previous;<span class="comment">//更新当前节点为删除节点的前一个元素</span></span><br><span class="line">        lastLink = <span class="built_in">null</span>;</span><br><span class="line">        expectedModCount++;</span><br><span class="line">        <span class="built_in">list</span>.size--;</span><br><span class="line">        <span class="built_in">list</span>.modCount++;</span><br><span class="line">      <span class="attr">...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>add remove next previous set 这五个操作都会有以下异常判断（并发操作异常）</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (expectedModCount == <span class="built_in">list</span>.modCount) &#123;</span><br><span class="line">    <span class="attr">...</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    throw <span class="literal">new</span> ConcurrentModificationException();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ReverseLinkIterator只是LinkIterator的反序迭代而已，理解好LinkIterator就很好理解ReverseLinkIterator了</p>
+<p>迭代器都说了这么多，下面我们看看LinkedList的主体部分：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认构造方法会创建一个空节点</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    voidLink = <span class="keyword">new</span> Link&lt;E&gt;(<span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);<span class="comment">//此时voidLink.previous==voidLink.next==null</span></span><br><span class="line">    voidLink.previous = voidLink;<span class="comment">//指向对象本身，保证使用voidLink.previous不会空指针异常</span></span><br><span class="line">    voidLink.next = voidLink;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">(Collection&lt;? <span class="keyword">extends</span> E&gt; collection)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>();<span class="comment">//new一个LinkedList的时候，总会调用到默认构造方法</span></span><br><span class="line">    addAll(collection);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>voidLink是维持整个list的关键所在，基本每个操作都离不开它</strong>　看后面的分析就知道了。</p>
+<p>添加元素的时候逻辑基本和上面迭代器中的逻辑一样，只是add(E e),offerFirst(E e)内部是直接调用addLastImpl(E e)执行添加操作而已，而指定位置的添加注意一点上面提及到根据插入点的索引与list的size的中点比较，从而选择从头开始还是从尾开始寻找该位置而已。其实涉及查找的操作都会使用这个策略的。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//public void add(int location, E object)的片段而已</span></span><br><span class="line"><span class="keyword">if</span> (location &lt; (size / <span class="number">2</span>)) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= location; i++) &#123;</span><br><span class="line">        link = link.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = size; i &gt; location; i--) &#123;</span><br><span class="line">        link = link.previous;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------</span><br><span class="line"><span class="function"><span class="keyword">public</span> boolean <span class="title">add</span>(<span class="params">E <span class="keyword">object</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> addLastImpl(<span class="keyword">object</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> boolean <span class="title">addLastImpl</span>(<span class="params">E <span class="keyword">object</span></span>) </span>&#123;</span><br><span class="line">    Link&lt;E&gt; oldLast = voidLink.previous;</span><br><span class="line">    Link&lt;E&gt; newLink = <span class="keyword">new</span> Link&lt;E&gt;(<span class="keyword">object</span>, oldLast, voidLink);</span><br><span class="line">    voidLink.previous = newLink;</span><br><span class="line">    oldLast.next = newLink;</span><br><span class="line">    size++;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在addAll方法中国，插入逻辑是不变的，只是参数检查而已</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">boolean</span> addAll(Collection&lt;? <span class="keyword">extends</span> E&gt; collection) &#123;</span><br><span class="line">    <span class="keyword">int</span> adding = collection.<span class="keyword">size</span>();</span><br><span class="line">    <span class="keyword">if</span> (adding == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;<span class="comment">//collection没有元素直接返回</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//判断是不是LinkedList的自己的相同对象。是的话会拷贝它所有的元素到ArrayList中。</span></span><br><span class="line">    Collection&lt;? <span class="keyword">extends</span> E&gt; elements = (collection == <span class="keyword">this</span>) ?</span><br><span class="line">            <span class="keyword">new</span> ArrayList&lt;E&gt;(collection) : collection;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//由LinkedList的构造方法可知，voidLink　== voidLink.previous（初次调用的时候）</span></span><br><span class="line">    <span class="comment">//不是第一次调用时，voidLink.previous已经指向了最后添加的那个元素了。详见一下几行代码</span></span><br><span class="line">    Link&lt;E&gt; <span class="keyword">previous</span> = voidLink.<span class="keyword">previous</span>;</span><br><span class="line">    <span class="comment">//循环插入collection中的元素</span></span><br><span class="line">    <span class="keyword">for</span> (E e : elements) &#123;</span><br><span class="line">        Link&lt;E&gt; newLink = <span class="keyword">new</span> Link&lt;E&gt;(e, <span class="keyword">previous</span>, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">previous</span>.<span class="keyword">next</span> = newLink;</span><br><span class="line">        <span class="keyword">previous</span> = newLink;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">previous</span>.<span class="keyword">next</span> = voidLink;</span><br><span class="line">    voidLink.<span class="keyword">previous</span> = <span class="keyword">previous</span>;</span><br><span class="line">    <span class="comment">//至此，会使得voidLink.next和voidLink.previous都指向最后一个添加的元素，</span></span><br><span class="line">    <span class="keyword">size</span> += adding;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们再来看看addFirst的实现：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span>(<span class="params">E <span class="keyword">object</span></span>) </span>&#123;</span><br><span class="line">    addFirstImpl(<span class="keyword">object</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> boolean <span class="title">addFirstImpl</span>(<span class="params">E <span class="keyword">object</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">//第一次addFirstImpl的时候voidLink.next＝＝voidLink，否则则是上次添加在头部的节点</span></span><br><span class="line">    Link&lt;E&gt; oldFirst = voidLink.next;</span><br><span class="line">    <span class="comment">//此时newLink.previous = voidLink，头结点的前继肯定指向空节点嘛（不同于c语言指向的是NULL）</span></span><br><span class="line">    <span class="comment">//newLink.next == voidLink.next</span></span><br><span class="line">    Link&lt;E&gt; newLink = <span class="keyword">new</span> Link&lt;E&gt;(<span class="keyword">object</span>, voidLink, oldFirst);</span><br><span class="line">    voidLink.next = newLink;<span class="comment">//看到没，voidLink.next保存着每次点在在头部的节点信息</span></span><br><span class="line">    oldFirst.previous = newLink;<span class="comment">//oldFirst则是上一次添加在头部的节点啦，它的previous指向newLink就顺理成章啦</span></span><br><span class="line">    size++;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里就能搞明白voidLink的previous和next的作用啦，那么其他的操作都是基于这两个东西操作的。<br>以下举一些例子：</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line"><span class="keyword">public</span> <span class="built_in">boolean</span> contains(Object object) &#123;</span><br><span class="line">    <span class="keyword">Link</span>&lt;E&gt; <span class="keyword">link</span> = voidLink.next;<span class="comment">//头节点</span></span><br><span class="line">    <span class="comment">//注意分两种情况查找即可</span></span><br><span class="line">    <span class="keyword">if</span> (object != <span class="built_in">null</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">link</span> != voidLink) &#123;</span><br><span class="line">            <span class="keyword">if</span> (object.<span class="keyword">equals</span>(<span class="keyword">link</span>.<span class="built_in">data</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">link</span> = <span class="keyword">link</span>.next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">link</span> != voidLink) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">link</span>.<span class="built_in">data</span> == <span class="built_in">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">link</span> = <span class="keyword">link</span>.next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line"><span class="keyword">public</span> E get(int location) &#123;</span><br><span class="line">    <span class="keyword">if</span> (location &gt;= <span class="number">0</span> &amp;&amp; location &lt; size) &#123;</span><br><span class="line">        <span class="keyword">Link</span>&lt;E&gt; <span class="keyword">link</span> = voidLink;<span class="comment">//这里，下一步就用到next 和　previous了</span></span><br><span class="line">        <span class="keyword">if</span> (location &lt; (size / <span class="number">2</span>)) &#123;</span><br><span class="line">            for (int i = <span class="number">0</span>; i &lt;= location; i++) &#123;</span><br><span class="line">                <span class="keyword">link</span> = <span class="keyword">link</span>.next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            for (int i = size; i &gt; location; i--) &#123;</span><br><span class="line">                <span class="keyword">link</span> = <span class="keyword">link</span>.previous;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">link</span>.<span class="built_in">data</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    throw <span class="literal">new</span> IndexOutOfBoundsException();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line"><span class="keyword">public</span> int indexOf(Object object) &#123;</span><br><span class="line">    int pos = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">Link</span>&lt;E&gt; <span class="keyword">link</span> = voidLink.next;</span><br><span class="line">    <span class="attr">...</span>.</span><br><span class="line">｝</span><br></pre></td></tr></table></figure>
+<p>再看看几个重要的方法：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//会抛异常</span></span><br><span class="line"><span class="comment">//注意是从头部移除</span></span><br><span class="line"><span class="keyword">public</span> <span class="function">E <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">return</span> <span class="title">removeFirstImpl</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//从头部添加</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    addFirstImpl(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//从头部移除元素</span></span><br><span class="line"><span class="keyword">public</span> <span class="function">E <span class="title">remove</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">return</span> <span class="title">removeFirstImpl</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//没有元素返回null</span></span><br><span class="line"><span class="keyword">public</span> <span class="function">E <span class="title">poll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> size == <span class="number">0</span> ? <span class="keyword">null</span> : removeFirst();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function">E <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">return</span> <span class="title">peekFirstImpl</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>只有poll peek操作遇到LinkedList无元素返回null，其他做此类型会抛出异常，其实现的接口已有说明</strong></p>
+<p>我们需要主要一下clear():仅是将size置零，voidLink的next,previous指向空元素而已，可见voidLink的作用很关键</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> clear() &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">size</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">size</span> = <span class="number">0</span>;</span><br><span class="line">      voidLink.<span class="keyword">next</span> = voidLink;</span><br><span class="line">      voidLink.<span class="keyword">previous</span> = voidLink;</span><br><span class="line">      modCount++;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>通过以上的分析，基本能理解好LinkedList了。其他具体的方法就不一一贴出来了，操作原理和上面的分析大同小异。<br>需要对每个方法详细的理解，可以直接去看LinkedList的源码。</p>
+<table>
+<thead>
+<tr>
+<th>ArrayList</th>
+<th>LinkedList</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基于数组实现</td>
+<td>基于链表实现</td>
+</tr>
+<tr>
+<td>实现RandomAccess接口，可以直接访问指定索引的元素</td>
+<td>没现RandomAccess接口,需要遍历到指定索引的位置</td>
+</tr>
+<tr>
+<td>查找访问快，插入删除慢</td>
+<td>查找访问慢，插入删除快</td>
+</tr>
+<tr>
+<td>存在扩容拷贝</td>
+<td>没有容量限制，无需扩容，内部会使用到ArrayList(addAll的时候)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>均不是线程安全的，并发操作会报异常</strong></p>
+<h3 id="you-KO-LinkedList"><a href="#you-KO-LinkedList" class="headerlink" title="you KO LinkedList !!!"></a>you KO LinkedList !!!</h3>
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LinkedList/" rel="tag">#LinkedList</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/26/ArrayList-源码分析/" rel="next" title="ArrayList 源码分析">
+                <i class="fa fa-chevron-left"></i> ArrayList 源码分析
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/03/偶数二进制位反转-JAVA/" rel="prev" title="偶数二进制位反转(JAVA)">
+                偶数二进制位反转(JAVA) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/03/LinkedList-源码分析/"
+           data-title="LinkedList 源码分析" data-url="dooogo.github.io/2016/10/03/LinkedList-源码分析/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="dooogo" />
+          <p class="site-author-name" itemprop="name">dooogo</p>
+          <p class="site-description motion-element" itemprop="description">若无力驾驭，自由便是负担</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1853941987/home?wvr=5" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/donlan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/04c42edcd1bb/latest_articles" target="_blank" title="简书">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedList"><span class="nav-number">1.</span> <span class="nav-text">LinkedList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#you-KO-LinkedList"><span class="nav-number">2.</span> <span class="nav-text">you KO LinkedList !!!</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dooogo</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"doogo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
