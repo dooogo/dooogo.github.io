@@ -1,0 +1,721 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="doogo" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="title: ViewStub源码简解date: 2016-08-24 00:20:54categories: Androidtags: ViewStub
+ViewStubViewStub是一个未加载时不可见的不会占据实际大小的，且可以用来懒加载布局资源的控件。当ViewStub被设置成可见或者是布局资源被inflated，ViewStub就会inflate它自己之中的View或者Views到父布">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Doo的主页">
+<meta property="og:url" content="dooogo.github.io/2016/10/03/ViewStub源码简解/index.html">
+<meta property="og:site_name" content="Doo的主页">
+<meta property="og:description" content="title: ViewStub源码简解date: 2016-08-24 00:20:54categories: Androidtags: ViewStub
+ViewStubViewStub是一个未加载时不可见的不会占据实际大小的，且可以用来懒加载布局资源的控件。当ViewStub被设置成可见或者是布局资源被inflated，ViewStub就会inflate它自己之中的View或者Views到父布">
+<meta property="og:updated_time" content="2016-10-03T05:31:52.146Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Doo的主页">
+<meta name="twitter:description" content="title: ViewStub源码简解date: 2016-08-24 00:20:54categories: Androidtags: ViewStub
+ViewStubViewStub是一个未加载时不可见的不会占据实际大小的，且可以用来懒加载布局资源的控件。当ViewStub被设置成可见或者是布局资源被inflated，ViewStub就会inflate它自己之中的View或者Views到父布">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title>  | Doo的主页 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a393584c41c219603e4e068220d7084f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Doo的主页</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-03T13:31:52+08:00" content="2016-10-03">
+              2016-10-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/03/ViewStub源码简解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/03/ViewStub源码简解/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>title: ViewStub源码简解<br>date: 2016-08-24 00:20:54<br>categories: Android<br>tags: ViewStub</p>
+<h3 id="ViewStub"><a href="#ViewStub" class="headerlink" title="ViewStub"></a>ViewStub</h3><p>ViewStub是一个未加载时不可见的不会占据实际大小的，且可以用来懒加载布局资源的控件。<br>当ViewStub被设置成可见或者是布局资源被inflated，ViewStub就会inflate它自己之中的View或者Views<br>到父布局中。因此，ViewStub使用了setVisibility(View.VISIBLE)或者inflate()后才会存在于view的绘制图层中。</p>
+<p>ViewStub中的View根据布局参数inflated后加入到ViewStub的父布局中，同样的，我们还可以定义或者重写inflate view 的id<br>通过使用ViewStub中的inflatedId这个属性。<br> <pre><br>   <viewstub android:id="@+id/stub" android:inflatedid="@+id/subTree" android:layout="@layout/mySubTree" android:layout_width="120dip" android:layout_height="40dip"><br> </viewstub></pre></p>
+<p> 因此就可以通过id”stub”这个ViewStub了。当”mySubTree”这个布局资源被加载后，这个ViewStub就北从它的父布局中移除了。<br> 而由ViewStub中指定的布局资源“mySubTree”创建出来的view就可以通过id”subTree”了。<br>并且这个最后被加载出来的view就赋予了120dip的宽和40dip高。</p>
+<p>通常地通过一下的方法将ViewStub加载到布局中：</p>
+<pre>
+ViewStub stub = (ViewStub) findViewById(R.id.stub);
+View inflated = stub.inflate();
+ </pre>
+
+<p> 当调用ViewStub的inflate()后，该ViewStub就会将其中加载出来的view加载到ViewStub的父布局中，并且返回inflate的到的view.<br> 这样就可以不通过findViewById()就可以获取一个view的引用了。</p>
+<hr>
+<p> ViewStub 继承自　View　拥有五个构造方法，主要有一下这两个构造方法：</p>
+ <figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public ViewStub(<span class="built_in">Context</span> <span class="built_in">context</span>, AttributeSet attrs, int defStyleAttr, int defStyleRes)</span><br><span class="line">super(<span class="built_in">context</span>)<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">final TypedArray a = <span class="built_in">context</span>.obtainStyledAttributes(attrs,</span><br><span class="line">        R.styleable.ViewStub, defStyleAttr, defStyleRes)<span class="comment">;</span></span><br><span class="line">mInflatedId = a.getResourceId(R.styleable.ViewStub_inflatedId, NO_ID)<span class="comment">;</span></span><br><span class="line">mLayoutResource = a.getResourceId(R.styleable.ViewStub_layout, <span class="number">0</span>)<span class="comment">;</span></span><br><span class="line">mID = a.getResourceId(R.styleable.ViewStub_id, NO_ID)<span class="comment">;</span></span><br><span class="line">a.recycle()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">setVisibility(GONE)<span class="comment">;</span></span><br><span class="line">setWillNotDraw(true)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p> 从上可知只要是根据AttributeSet获取inflatedId , layout 和　id 这三个属性值。<br> 关键是在于setVisibility(GONE);setWillNotDraw(true);这样在布局文件中的ViewStub<br> 就不会在初始化布局的时候加载ViewStub了。</p>
+ <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ViewStub</span><span class="params">(Context context, @LayoutRes <span class="keyword">int</span> layoutResource)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">    mLayoutResource = layoutResource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 这个主要是直接在代码中新建一个ViewStub的时候使用。它就获取了布局资源的id而已。</p>
+<p> 还需要注意的一点是： 被加载出来的view是一个弱引用。</p>
+<p> <code>private WeakReference&lt;View&gt; mInflatedViewRef;</code></p>
+ <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">以下是重写了View的setVisibility方法</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">setVisibility</span><span class="params">(<span class="keyword">int</span> visibility)</span> </span>&#123;</span><br><span class="line">   <span class="comment">//第一次设置的mInflatedViewRef==null,则调用inflate()去加载view</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mInflatedViewRef != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">//已经经过加载后直接从mInflatedViewRef中获取该view</span></span><br><span class="line">        View view = mInflatedViewRef.get();</span><br><span class="line">        <span class="keyword">if</span> (view != <span class="keyword">null</span>) &#123;</span><br><span class="line">            view.setVisibility(visibility);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"setVisibility called on un-referenced view"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.setVisibility(visibility);</span><br><span class="line">        <span class="keyword">if</span> (visibility == VISIBLE || visibility == INVISIBLE) &#123;</span><br><span class="line">            inflate();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 以下便是inflate的方法全部内容，逻辑还是很简单的<br> <figure class="highlight zephir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> View inflate() &#123;</span><br><span class="line">   　<span class="comment">//获取父view</span></span><br><span class="line">    <span class="keyword">final</span> ViewParent viewParent = getParent();</span><br><span class="line">    <span class="comment">//保证父view必须是一个ViewGroup</span></span><br><span class="line">    <span class="keyword">if</span> (viewParent != <span class="keyword">null</span> &amp;&amp; viewParent <span class="keyword">instanceof</span> ViewGroup) &#123;</span><br><span class="line">       <span class="comment">//ViewStub中view的布局id</span></span><br><span class="line">        <span class="keyword">if</span> (mLayoutResource != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">final</span> ViewGroup <span class="keyword">parent</span> = (ViewGroup) viewParent;</span><br><span class="line">            <span class="keyword">final</span> LayoutInflater factory;</span><br><span class="line">            <span class="keyword">if</span> (mInflater != <span class="keyword">null</span>) &#123;</span><br><span class="line">                factory = mInflater;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                factory = LayoutInflater.from(mContext);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">final</span> View view = factory.inflate(mLayoutResource, <span class="keyword">parent</span>,</span><br><span class="line">                    <span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">           <span class="comment">//为inflate出来的view设置id</span></span><br><span class="line">            <span class="keyword">if</span> (mInflatedId != NO_ID) &#123;</span><br><span class="line">                view.setId(mInflatedId);</span><br><span class="line">            &#125;</span><br><span class="line">           <span class="comment">//找到在父布局中的索引</span></span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> index = <span class="keyword">parent</span>.indexOfChild(this);</span><br><span class="line">           <span class="comment">//将ViewStub从父布局中中移除</span></span><br><span class="line">            <span class="keyword">parent</span>.removeViewInLayout(this);</span><br><span class="line"></span><br><span class="line">           <span class="comment">//根据刚刚得到的布局索引，将inflate得到的view添加到父布局中</span></span><br><span class="line">            <span class="keyword">final</span> ViewGroup.LayoutParams layoutParams = getLayoutParams();</span><br><span class="line">            <span class="keyword">if</span> (layoutParams != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">parent</span>.addView(view, index, layoutParams);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">parent</span>.addView(view, index);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//更新mInflatedViewRef为新inflate得到的view</span></span><br><span class="line">            mInflatedViewRef = <span class="keyword">new</span> WeakReference&lt;View&gt;(view);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//inflate完毕的回调接口</span></span><br><span class="line">            <span class="keyword">if</span> (mInflateListener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                mInflateListener.onInflate(this, view);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> view;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"ViewStub must have a valid layoutResource"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"ViewStub must have a non-null ViewGroup viewParent"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>ViewStub中定义的inflated完毕的回调接口，其作用见名就可以知义了。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">interface</span> <span class="title">OnInflateListener</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onInflate</span>(<span class="params">ViewStub stub, View inflated</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/03/ArrayList源码分析/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/03/偶数二进制位反转（Java）/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/03/ViewStub源码简解/"
+           data-title="" data-url="dooogo.github.io/2016/10/03/ViewStub源码简解/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="dooogo" />
+          <p class="site-author-name" itemprop="name">dooogo</p>
+          <p class="site-description motion-element" itemprop="description">若无力驾驭，自由便是负担</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1853941987/home?wvr=5" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/donlan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/04c42edcd1bb/latest_articles" target="_blank" title="简书">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ViewStub"><span class="nav-number">1.</span> <span class="nav-text">ViewStub</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dooogo</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"doogo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
