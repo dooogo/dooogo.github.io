@@ -1,0 +1,924 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="排序," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="先来个总览，知其庞然大体，而入之其微，后而一窝端需要先知道的几个概念：
+
+稳定排序：在待排序的文件中，若存在若干个相同关键字的记录，经过排序后这些具有相同关键字的记录相对顺序不改变。
+
+不稳定排序：与稳定排序相反
+
+内部排序：待排序的记录存放在计算机随机存储器（RAM）中进行排序的过程
+
+外部排序：待排序记录的数量很大，以至于内存不能容纳完全部的记录，需要在排序过程中对外存进行访问的排序（也就是说">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再温排序">
+<meta property="og:url" content="dooogo.github.io/2016/10/13/再温排序/index.html">
+<meta property="og:site_name" content="Doo的主页">
+<meta property="og:description" content="先来个总览，知其庞然大体，而入之其微，后而一窝端需要先知道的几个概念：
+
+稳定排序：在待排序的文件中，若存在若干个相同关键字的记录，经过排序后这些具有相同关键字的记录相对顺序不改变。
+
+不稳定排序：与稳定排序相反
+
+内部排序：待排序的记录存放在计算机随机存储器（RAM）中进行排序的过程
+
+外部排序：待排序记录的数量很大，以至于内存不能容纳完全部的记录，需要在排序过程中对外存进行访问的排序（也就是说">
+<meta property="og:updated_time" content="2016-10-24T17:42:31.177Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="再温排序">
+<meta name="twitter:description" content="先来个总览，知其庞然大体，而入之其微，后而一窝端需要先知道的几个概念：
+
+稳定排序：在待排序的文件中，若存在若干个相同关键字的记录，经过排序后这些具有相同关键字的记录相对顺序不改变。
+
+不稳定排序：与稳定排序相反
+
+内部排序：待排序的记录存放在计算机随机存储器（RAM）中进行排序的过程
+
+外部排序：待排序记录的数量很大，以至于内存不能容纳完全部的记录，需要在排序过程中对外存进行访问的排序（也就是说">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 再温排序 | Doo的主页 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a393584c41c219603e4e068220d7084f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Doo的主页</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                再温排序
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-13T10:01:08+08:00" content="2016-10-13">
+              2016-10-13
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/13/再温排序/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/13/再温排序/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="先来个总览，知其庞然大体，而入之其微，后而一窝端"><a href="#先来个总览，知其庞然大体，而入之其微，后而一窝端" class="headerlink" title="先来个总览，知其庞然大体，而入之其微，后而一窝端"></a>先来个总览，知其庞然大体，而入之其微，后而一窝端</h3><p><strong>需要先知道的几个概念：</strong></p>
+<ul>
+<li><p>稳定排序：在待排序的文件中，若存在若干个相同关键字的记录，经过排序后这些具有相同关键字的记录相对顺序不改变。</p>
+</li>
+<li><p>不稳定排序：与稳定排序相反</p>
+</li>
+<li><p>内部排序：待排序的记录存放在计算机随机存储器（RAM）中进行排序的过程</p>
+</li>
+<li><p>外部排序：待排序记录的数量很大，以至于内存不能容纳完全部的记录，需要在排序过程中对外存进行访问的排序（也就是说涉及到了内外存交换）</p>
+<p>​</p>
+</li>
+</ul>
+<p><strong>排序算法性能评价</strong></p>
+<ol>
+<li>执行时间和所需辅助空间</li>
+<li>算法本身的复杂度</li>
+</ol>
+<p>空间复杂度：所需辅助空间不依赖于排序问题的规模n，则辅助空间为O(1),称之为就地排序。而非就地排序的辅助空间一般为O(n);</p>
+<p>时间复杂度：大多数排序算法的时间开销主要是关键字的比较与移动。</p>
+<h3 id="稳定排序"><a href="#稳定排序" class="headerlink" title="稳定排序"></a>稳定排序</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">排序算法</th>
+<th style="text-align:center">时间复杂度</th>
+<th style="text-align:center">空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">冒泡排序</td>
+<td style="text-align:center">平均，最差都是O(n^2),最好O(n)</td>
+<td style="text-align:center">O(1)</td>
+</tr>
+<tr>
+<td style="text-align:center">双向冒泡排序</td>
+<td style="text-align:center">平均，最差都是O(n^2),最好O(n)</td>
+<td style="text-align:center">O(1)</td>
+</tr>
+<tr>
+<td style="text-align:center">插入排序</td>
+<td style="text-align:center">平均，最差都是O(n^2),最好O(n)</td>
+<td style="text-align:center">O(1)</td>
+</tr>
+<tr>
+<td style="text-align:center">归并排序</td>
+<td style="text-align:center">最差，最差，平均都是O(nlogn)</td>
+<td style="text-align:center">O(n)</td>
+</tr>
+<tr>
+<td style="text-align:center">桶排序</td>
+<td style="text-align:center">O(n)</td>
+<td style="text-align:center">O(k)</td>
+</tr>
+<tr>
+<td style="text-align:center">基数排序</td>
+<td style="text-align:center">O(dn)  (d是常数)</td>
+<td style="text-align:center">O(n)</td>
+</tr>
+<tr>
+<td style="text-align:center">二叉树排序</td>
+<td style="text-align:center">O(nlogn)</td>
+<td style="text-align:center">O(n)</td>
+</tr>
+<tr>
+<td style="text-align:center">图书馆排序</td>
+<td style="text-align:center">O(nlogn)</td>
+<td style="text-align:center">(1+x)n</td>
+</tr>
+</tbody>
+</table>
+<h3 id="不稳定排序"><a href="#不稳定排序" class="headerlink" title="不稳定排序"></a>不稳定排序</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">排序算法</th>
+<th style="text-align:center">时间复杂度</th>
+<th style="text-align:center">空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">选择排序</td>
+<td style="text-align:center">最差，平均都是O(n^2)</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">希尔排序</td>
+<td style="text-align:center">O(nlogn)</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">堆排序</td>
+<td style="text-align:center">最差，最好，平均都是O(nlogn)</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">快速排序</td>
+<td style="text-align:center">平均O(nlogn),最坏O(n^2)</td>
+<td style="text-align:center">O(logn)</td>
+</tr>
+</tbody>
+</table>
+<p>内部排序：冒泡排序，插入排序，选择排序，快速排序，堆排序，基数排序</p>
+<p>外部排序：归并排序，桶排序，基数排序</p>
+<p>一些实践总结：</p>
+<p>简单排序中直接插入最好，快速排序最快，待排序记录为正序的时候直接插入和猫婆都最佳</p>
+<p>n&lt;=50的时候，可以直接插入或者选排序，记录规模小的时候，直接插入比较好，否则因为直接选择移动的记录次数少于直接插入，则选择 选择排序较好。</p>
+<p>待排序记录基本有序的情况下，选用直接插入，冒泡，随机快速排序较好。</p>
+<p>若n的规模较大的时候，采用事假复杂度为 O(nlogn)的排序算法较好：快速排序，归并排序，堆排序。</p>
+<h3 id="冒泡排序（稳定）"><a href="#冒泡排序（稳定）" class="headerlink" title="冒泡排序（稳定）"></a>冒泡排序（稳定）</h3><p>思想：以正序为例，每一趟排序比较都将未排序部分的最小元素移动交换到未排序部分的第一位。</p>
+<p>经过优化的冒泡排序，在最好情况下，也就是进行第一次冒泡即可的情况（已有正序），而且第一次冒泡肯定是n次比较交换，无法避免。</p>
+<p>最坏情况是逆序的情况比较交换次数是：1+2+…+n-1+n = n +(n^2-n)/2 = (1+n)*n/2=O(n^2)</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(<span class="keyword">int</span> a[])</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;a.length;i++)&#123; <span class="comment">//冒泡次数</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j = a.length<span class="number">-1</span>;j&gt;i;j--)&#123; <span class="comment">//从底往上冒泡的过程</span></span><br><span class="line">			<span class="keyword">if</span>(a[j] &lt; a[j<span class="number">-1</span>]) <span class="comment">// 比前一个小则上冒，等于的时候不做出来，所以是稳定排序</span></span><br><span class="line">				swap(a,j,j<span class="number">-1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">bubbleSortGood</span><span class="params">(<span class="keyword">int</span> a[])</span></span>&#123;</span><br><span class="line">	<span class="keyword">boolean</span> flag = <span class="keyword">true</span>; <span class="comment">//只要一趟冒泡过程没有发生交换，则已有序，直接退出冒泡的循环即可</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">		flag = <span class="keyword">true</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j = a.length<span class="number">-1</span>;j&gt;i;j--)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[j] &lt; a[j<span class="number">-1</span>])&#123;</span><br><span class="line">				swap(a,j,j<span class="number">-1</span>);</span><br><span class="line">				flag = <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(flag)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="选择排序（不稳定）"><a href="#选择排序（不稳定）" class="headerlink" title="选择排序（不稳定）"></a>选择排序（不稳定）</h3><p>思想：每趟比较交换中将最小的元素交换打动未排序部分的第一位。交换原则是当前记录小于未排序部分的第一位则此两个数交换。</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public static void selectSort<span class="comment">(int a[])</span>&#123;</span><br><span class="line">		for<span class="comment">(int i=0;i&lt;a.length-1;i++)</span>&#123;</span><br><span class="line">			for<span class="comment">(int j= i+1;j&lt;a.length;j++)</span>&#123;</span><br><span class="line">				<span class="keyword">if</span><span class="comment">(a[i]&gt;a[j])</span></span><br><span class="line">					swap<span class="comment">(a,i,j)</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>举个例子说明为什么会不稳定：</p>
+<p>假设待排序序列为：7 , 8 , 9 ，7, 5 , 3 。记a1 =0 第一个7出现的位置，a2=3，第二个7出现的位置。在第一趟选择排序的时候 index = 0-3时均没有交换。index = 4,此时5&lt;7，则交换。交换后序列变成了：5，8 , 9 ，7 , 7 , 3，那么显然的，原来第一个7的位置变成了4，此时与未排序的序列中的同关键字7的相对位置发生了改变。</p>
+<p>复杂度同冒泡排序一样分析即可。</p>
+<h3 id="插入排序（稳定）"><a href="#插入排序（稳定）" class="headerlink" title="插入排序（稳定）"></a>插入排序（稳定）</h3><p>思想：将未排序部分的第一个记录插入到已排好序的部分之中。想想你玩扑克的场景。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">insertSort</span><span class="params">(<span class="keyword">int</span> a[])</span></span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">          <span class="comment">//待排序的元素，从以排好序的部分的后面向前比较，知道第一次遇到小鱼或者等于的元素则停止</span></span><br><span class="line">          <span class="comment">//否则比较一次则交换一次（相当于将插入位置后的元素后移）</span></span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = i;j&gt;<span class="number">0</span> &amp;&amp; a[j]&lt;a[j<span class="number">-1</span>];j--)</span><br><span class="line">				swap(a,j,j<span class="number">-1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>最坏的情况下，序列已经是降序序列，此时需要进行n(n-1)/2次比较。最好的情况是已经是升序序列，则只需要进行n-1次比较即可。</p>
+<h3 id="希尔排序（不稳定）"><a href="#希尔排序（不稳定）" class="headerlink" title="希尔排序（不稳定）"></a>希尔排序（不稳定）</h3><p>思想：先将整个待排序序列分成若干个子序列，分别对每个子序列进行直接插入排序，待每个子序列都有序后，在对整个序列进行一次直接插入排序。其实分割子序列是按照一个“增量”进行分割的，“增量；“增量”的选取会直接影响到算法的性能。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> shellSort(<span class="keyword">int</span> a[])&#123;</span><br><span class="line">		<span class="keyword">int</span> <span class="built_in">step</span> = a.length/<span class="number">2</span>; <span class="comment">//这里的划分策略是折半划分</span></span><br><span class="line">        <span class="built_in">while</span>(<span class="built_in">step</span>!=<span class="number">0</span>)&#123; <span class="comment">//划分的子序列数减少</span></span><br><span class="line">          <span class="built_in">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;<span class="built_in">step</span>;k++)&#123; <span class="comment">//对每个子序列进行直接插入排序</span></span><br><span class="line">            <span class="built_in">for</span>(<span class="keyword">int</span> i=k;i&lt;k+<span class="built_in">step</span>;i++)&#123;</span><br><span class="line">              <span class="built_in">for</span>(<span class="keyword">int</span> j=i;j&gt;k &amp;&amp; a[j]&lt;a[j<span class="number">-1</span>];j--)&#123;</span><br><span class="line">                swap(a,j,j<span class="number">-1</span>);</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="built_in">step</span>=<span class="built_in">step</span>&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>测试：</p>
+<p>对序列：3 , 5 , 33 , 2 , 4 , 6 , 23 , 56 , 23 , 24 , 4 , 54 , 6 进行直接插入排序与希尔排序，执行swap()方法的次数分别是：</p>
+<p>直接插入排序：25次</p>
+<p>希尔排序：16次</p>
+<p>以上只是从单一数据进行说明，并非对每个序列排序都符合以上的交换次数对比关系。</p>
+<p>有人大量测试得到希尔排序比较和移动次数大约在：n^1.25 - 1.6* n^1.25</p>
+<p><strong>以下分析为什么希尔排序相对直接插入排序有更好的性能。</strong></p>
+<ol>
+<li>待排序序列基本有序的时候，直接插入排序需要的移动交换次数是均相对少的（相对于冒泡，选择）；</li>
+<li>n 值较小的时候 n 与 n^2的差别也较小，所以直接插入排序的最好时间复杂度O(n) 与最坏时间复杂度O(n^2)差别也不大。</li>
+<li>希尔排序开始的时候增量较大，那个划分的子序列就较小，所以子序列的直接插入排序较快。而后来增量逐渐较小，划分的子序列数就减少，然而之前的划分中已经是现在的子序列基本有序，所以在新的子序列进行直接插入排序也比较快。</li>
+</ol>
+<h3 id="快速排序（不稳定）"><a href="#快速排序（不稳定）" class="headerlink" title="快速排序（不稳定）"></a>快速排序（不稳定）</h3><p>基本思想：通过一趟排序将待排序的记录分割成独立的两部分。其中一部分的关键字均比另一部分的记录关键字小，则可以分别继续对这两部分进行排序，已达到整个序列有序的目的。</p>
+<p><strong>步骤</strong></p>
+<p>一：</p>
+<ol>
+<li>初始是 l ,h 分别为0，序列的长度</li>
+<li>如果l&gt;=h则排序完成，否则进行步骤3</li>
+<li>进行步骤二，返回值记为 p。</li>
+<li>对序列arr[l … p]重复步骤2</li>
+<li>对序列arr[p+1… h]重复步骤2</li>
+</ol>
+<p>二：</p>
+<ol>
+<li>从序列中选取一个记录作为轴枢，一般是当前序列的第一个元素作为轴枢。记为 p 。此外low,high分别为序列的起始下标，结束下标。</li>
+<li>从结束下标往左进行比较(也就是执行 –high 操作),找到第一个比 p 小的记录，并将该记录设置到 low 位置，也就是执行arr[low] = arr[high]。</li>
+<li>从low位置开始向右进行比较（++low）,找到第一个比p大的记录，并将该记录设置到high位置（arr[high] = arr[low]）；</li>
+<li>重复步骤2,3,直到low&gt;=high（此时完成的是一次划分序列的操作），返回此时的位置索引low</li>
+</ol>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> low,<span class="keyword">int</span> high)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(low&lt;high)&#123;</span><br><span class="line">			<span class="keyword">int</span> p = partition(a, low, high);</span><br><span class="line">			quickSort(a, low, p<span class="number">-1</span>);<span class="comment">//递归对轴枢左边的序列进行排序</span></span><br><span class="line">			quickSort(a, p+<span class="number">1</span>, high);<span class="comment">//递归对轴枢右边的序列进行排序</span></span><br><span class="line">          </span><br><span class="line">          <span class="comment">//可以发现，只需要对子序列递归的排序即可，不需要合并子序列排序的结果</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> low,<span class="keyword">int</span> high)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> t = a[low];</span><br><span class="line">		<span class="keyword">while</span>(low&lt;high)&#123;<span class="comment">//交替从左右两边向中间扫描比较</span></span><br><span class="line">          <span class="comment">//将比轴枢位置小的记录移动到轴枢位置的左边</span></span><br><span class="line">			<span class="keyword">while</span>(low&lt;high &amp;&amp; t&lt;=a[high])</span><br><span class="line">				--high;</span><br><span class="line">			a[low] = a[high];</span><br><span class="line">           <span class="comment">//将比轴枢位置大的记录移动到轴枢位置的右边</span></span><br><span class="line">			<span class="keyword">while</span>(low&lt;high &amp;&amp; t&gt;=a[low])</span><br><span class="line">				++low;</span><br><span class="line">			a[high] = a[low];</span><br><span class="line">		&#125;</span><br><span class="line">		a[low] = t;<span class="comment">//将轴枢位置的值放到正确的位置，一趟排序后应该在的位置</span></span><br><span class="line">		<span class="keyword">return</span> low;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>以上递归实现的快速排序中，因为递归会需要一个额外的栈空间进行维护每个递归。假若每趟排序都将记录分割成接近的两个子序列，那个就是说类似满二叉树的结构，此时栈的最大深度为 log2 n  +1。而加入每趟排序之后，轴枢位置总偏于两端的话，类似只有左子树或者右子树的二叉树，那个栈的最大深度是 n 。经过优化，也就是说每次的到的分割的子序列，先对长度较短的序列进行快速排序，那么栈的最大深度可以降到log n 。</p>
+<p>当待排序记录（基本）有序的时候，快排会退化成冒泡排序。</p>
+<p>以上方法的快速排序的时间复杂度主要来自partition函数。所以  <strong>T(n) = P(n) +T(k-1) +T(n-k)</strong> 。P(n)是对n个记录进行一趟快排的时间，而且在随机的序列中一趟快速排序之后 k 在 1 ～ n之间的任何一个值的概率相等，那么所需要的平均时间是：T(n) = (n+1)<em>T(n-1)/n+(2n-1)</em>c/n ，c是一个常数。最后得到的是O(nlogn)的数量级。、</p>
+<h3 id="堆排序（不稳定）"><a href="#堆排序（不稳定）" class="headerlink" title="堆排序（不稳定）"></a>堆排序（不稳定）</h3><p>要理解堆排序，我们需要先了解什么事堆。</p>
+<p>堆：n个元素的序列{k1,k2,k3,…,kn}满足如下的关系：</p>
+<p>最小堆：ki&lt;=k(2i)  &amp;&amp; ki&lt;=k(2i+1)</p>
+<p>最大堆：ki&gt;=k(2i)  &amp;&amp; ki&gt;=k(2i+1)</p>
+<p>i=1~floor(n/2)</p>
+<p>一个堆可以对应一个完全二叉树</p>
+<p>思想：通过将一个无序的序列构建成一个最大堆或者最小堆，每次从堆顶就可以获取得到当前堆的最大或者最小值，当堆顶无元素的时候则可以得到一个有序的序列了。  </p>
+<p>建堆的过程其实就是一个反复调成的过程（保证当前建立好的是一个堆）。如果将这个序列看做是一个完全二叉树的话，那个最后一个非终端结点就是floor（n/2）。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">heapAdjust</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> s,<span class="keyword">int</span> l)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> t = a[s]; <span class="comment">//先保存当前节点的值</span></span><br><span class="line">		<span class="comment">//从当前节点的左孩子开始寻找,直到没有孩子节点（也就是自己就是叶子节点的时候）</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>*s;i&lt;l;i*=<span class="number">2</span>)&#123;</span><br><span class="line">			<span class="comment">//t节点存在右孩子，且右孩子大于左孩子（说明右孩子可能大于t对应的节点，大于就需要调整～）</span></span><br><span class="line">			<span class="comment">//那么令当前节点加一（指向右孩子）</span></span><br><span class="line">			<span class="keyword">if</span>(i&lt;l &amp;&amp; a[i]&lt;a[i+<span class="number">1</span>])</span><br><span class="line">				i++;</span><br><span class="line">			<span class="keyword">if</span>(t&gt;a[i]) <span class="comment">//t对应的节点大于两个孩子节点，所以不用调整直接退出</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="comment">//将找到的大于的t节点对应的节点，交换到 s 对应的节点处，同时更新s为当前的i值</span></span><br><span class="line">			<span class="comment">//也就是如果下次还存在交换，那么就是针对最新的s(上次交换的s)</span></span><br><span class="line">			a[s] = a[i];</span><br><span class="line">			s = i;</span><br><span class="line">		&#125;</span><br><span class="line">		a[s] = t; <span class="comment">//t最终被交换到的是s处（上面的for循环直接被break的话，相当于没有交换）</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">HeapSort</span><span class="params">(<span class="keyword">int</span> a[])</span></span>&#123;</span><br><span class="line">		<span class="comment">//从左后一个非终端结点向前，因为如果是叶子节点</span></span><br><span class="line">		<span class="comment">//那么不会存在比自己大的孩子节点了</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = a.length/<span class="number">2</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">			heapAdjust(a, i, a.length);</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=a.length<span class="number">-1</span>;i&gt;<span class="number">0</span>;i--)&#123;</span><br><span class="line">			<span class="comment">//最大堆堆顶是最大的元素</span></span><br><span class="line">			<span class="comment">//那么这里是不断交换到i（i从末尾向前移动）</span></span><br><span class="line">			<span class="comment">//那么最大值就会从最后递减向前排列</span></span><br><span class="line">			swap(a,<span class="number">0</span>,i);</span><br><span class="line">			<span class="comment">//只调整0～i-1的元素，i-1之后的已经有序了</span></span><br><span class="line">			heapAdjust(a, <span class="number">0</span>, i<span class="number">-1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>由上可见，堆排序的主要耗费时间是在于初始建堆以及反复调整新堆上，而对于深度为k的堆，调整算法中进行关键字比较的次数最多为2(k-1)次。，所以在建立n个元素，深度为h的堆的时候，总共进行的关键字比较次数不超过4n。而堆的深度为floor(log2 n )+1。新堆调整次数为n-1次，则总共进行的比较次数不超过：</p>
+<p>2（floor(log2 (n-1)) + floor(log2 (n-1)) +… + floor(log2 2)）&lt; 2nlog2 n</p>
+<p>所以时间复杂度是：<strong>O(nlogn)</strong></p>
+<p>空间复杂度：<strong>O(1)</strong></p>
+<p>因为只有一个保存临时节点信息的变量。</p>
+<h3 id="归并排序（稳定）"><a href="#归并排序（稳定）" class="headerlink" title="归并排序（稳定）"></a>归并排序（稳定）</h3><p>思想：将两个已经排好序的序列合并成一个有序序列。</p>
+<p>步骤：</p>
+<ol>
+<li>将相邻两个记录进行归并操作，得到floor（n/2）个子序列，排序后每个序列包含两个记录。</li>
+<li>将上诉序列再次进行归并操作，将形成floor(n/4)个子序列，每个子序列包含四个记录</li>
+<li>重复步骤2直到所有记录排序完毕。</li>
+</ol>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> temp[],<span class="keyword">int</span> s,<span class="keyword">int</span> mid,<span class="keyword">int</span> e)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> i = s;</span><br><span class="line">		<span class="keyword">int</span> j = mid+<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">int</span> x = s;</span><br><span class="line">		<span class="comment">//先将需要合并的两个序列的公共部分由小到大复制到缓存数组</span></span><br><span class="line">		<span class="keyword">while</span>(i&lt;=mid &amp;&amp; j&lt;=e)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[i]&gt;a[j])</span><br><span class="line">				temp[x++] = a[j++];</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				temp[x++] = a[i++];</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//以下两部是将由剩余没有复制到缓存数组的记录直接放到缓存数组后面</span></span><br><span class="line">		<span class="comment">//因为两个需要合并的序列长度不一样的时候肯定会由一个序列的会有剩下</span></span><br><span class="line">		<span class="comment">//没有复制到缓存数组的</span></span><br><span class="line">		<span class="keyword">while</span>(i&lt;=mid)</span><br><span class="line">			temp[x++] = a[i++];</span><br><span class="line">		<span class="keyword">while</span>(j&lt;=e)</span><br><span class="line">			temp[x++] = a[j++];</span><br><span class="line">		<span class="comment">//将缓存数组的记录，重新复制回原数组</span></span><br><span class="line">		x = s;</span><br><span class="line">		<span class="keyword">while</span>(x&lt;=e)</span><br><span class="line">			a[x] =temp[x++];</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">MSort</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> temp[],<span class="keyword">int</span> s,<span class="keyword">int</span> e)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(s&lt;e)&#123;</span><br><span class="line">			<span class="comment">//演示的是二路归并（最简单的归并）</span></span><br><span class="line">			<span class="keyword">int</span> mid = (s+e)/<span class="number">2</span>;</span><br><span class="line">			MSort(a,temp,s,mid);</span><br><span class="line">			MSort(a,temp,mid+<span class="number">1</span>,e);</span><br><span class="line">			merge(a,temp,s,mid,e);<span class="comment">//从最递归低层返回的时候开始合并</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">mergeSort</span><span class="params">(<span class="keyword">int</span> a[])</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> temp[] = <span class="keyword">new</span> <span class="keyword">int</span>[a.length];</span><br><span class="line">		MSort(a,temp,<span class="number">0</span>,a.length<span class="number">-1</span>);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>在归并排序中，首先需要一个和原来序列长度异常的辅助序列。空间是O(n),而在递归进行划分归并的时候需要借用递归栈，递归的次数就是进行归并的次数，也就是log2 n 。所以总的归并排序的空间复杂度还是O(n)的。</p>
+<p>先看看分割序列的时候，如果给予以上的二路归并的话，也就是递归的深度，其时间复杂度是O(nlogn)。而在合并的时候时间不会超过O(n)。所以归并的时间复杂度是O(nlogn)。</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/排序/" rel="tag">#排序</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/03/偶数二进制位反转-JAVA/" rel="next" title="偶数二进制位反转(JAVA)">
+                <i class="fa fa-chevron-left"></i> 偶数二进制位反转(JAVA)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/25/Android-性能优化总结/" rel="prev" title="Android 性能优化总结">
+                Android 性能优化总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/13/再温排序/"
+           data-title="再温排序" data-url="dooogo.github.io/2016/10/13/再温排序/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="dooogo" />
+          <p class="site-author-name" itemprop="name">dooogo</p>
+          <p class="site-description motion-element" itemprop="description">若无力驾驭，自由便是负担</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1853941987/home?wvr=5" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/donlan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/04c42edcd1bb/latest_articles" target="_blank" title="简书">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#先来个总览，知其庞然大体，而入之其微，后而一窝端"><span class="nav-number">1.</span> <span class="nav-text">先来个总览，知其庞然大体，而入之其微，后而一窝端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#稳定排序"><span class="nav-number">2.</span> <span class="nav-text">稳定排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不稳定排序"><span class="nav-number">3.</span> <span class="nav-text">不稳定排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冒泡排序（稳定）"><span class="nav-number">4.</span> <span class="nav-text">冒泡排序（稳定）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择排序（不稳定）"><span class="nav-number">5.</span> <span class="nav-text">选择排序（不稳定）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入排序（稳定）"><span class="nav-number">6.</span> <span class="nav-text">插入排序（稳定）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#希尔排序（不稳定）"><span class="nav-number">7.</span> <span class="nav-text">希尔排序（不稳定）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快速排序（不稳定）"><span class="nav-number">8.</span> <span class="nav-text">快速排序（不稳定）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆排序（不稳定）"><span class="nav-number">9.</span> <span class="nav-text">堆排序（不稳定）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#归并排序（稳定）"><span class="nav-number">10.</span> <span class="nav-text">归并排序（稳定）</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dooogo</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"doogo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

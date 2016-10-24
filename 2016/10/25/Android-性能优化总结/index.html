@@ -1,0 +1,1199 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android性能优化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="将从以下几个方面总结Android的应用性能优化性能
+框架API
+UI 性能
+I/O性能
+屏幕滚动性能
+
+内存
+Android 如何管理内存
+OOM终结 &amp;amp; 低内存终结
+应用内存使用监测
+
+
+识别内存泄露
+最佳实践
+
+
+糟糕的用户体验
+
+Activity 启动时间过长
+应用无反应（ANR）
+帧速率差
+
+关于帧帧速率
+
+为了保证能达到60fps，最多只有16ms去处理每一帧
+而保证能达到24">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 性能优化总结">
+<meta property="og:url" content="dooogo.github.io/2016/10/25/Android-性能优化总结/index.html">
+<meta property="og:site_name" content="Doo的主页">
+<meta property="og:description" content="将从以下几个方面总结Android的应用性能优化性能
+框架API
+UI 性能
+I/O性能
+屏幕滚动性能
+
+内存
+Android 如何管理内存
+OOM终结 &amp;amp; 低内存终结
+应用内存使用监测
+
+
+识别内存泄露
+最佳实践
+
+
+糟糕的用户体验
+
+Activity 启动时间过长
+应用无反应（ANR）
+帧速率差
+
+关于帧帧速率
+
+为了保证能达到60fps，最多只有16ms去处理每一帧
+而保证能达到24">
+<meta property="og:updated_time" content="2016-10-24T17:43:24.138Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 性能优化总结">
+<meta name="twitter:description" content="将从以下几个方面总结Android的应用性能优化性能
+框架API
+UI 性能
+I/O性能
+屏幕滚动性能
+
+内存
+Android 如何管理内存
+OOM终结 &amp;amp; 低内存终结
+应用内存使用监测
+
+
+识别内存泄露
+最佳实践
+
+
+糟糕的用户体验
+
+Activity 启动时间过长
+应用无反应（ANR）
+帧速率差
+
+关于帧帧速率
+
+为了保证能达到60fps，最多只有16ms去处理每一帧
+而保证能达到24">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android 性能优化总结 | Doo的主页 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a393584c41c219603e4e068220d7084f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Doo的主页</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 性能优化总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-25T01:29:35+08:00" content="2016-10-25">
+              2016-10-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/25/Android-性能优化总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/25/Android-性能优化总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="将从以下几个方面总结Android的应用性能优化"><a href="#将从以下几个方面总结Android的应用性能优化" class="headerlink" title="将从以下几个方面总结Android的应用性能优化"></a>将从以下几个方面总结Android的应用性能优化</h1><h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><ul>
+<li>框架API</li>
+<li>UI 性能</li>
+<li>I/O性能</li>
+<li>屏幕滚动性能</li>
+</ul>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ul>
+<li>Android 如何管理内存<ul>
+<li>OOM终结 &amp; 低内存终结</li>
+<li>应用内存使用监测</li>
+</ul>
+</li>
+<li>识别内存泄露</li>
+<li>最佳实践</li>
+</ul>
+<hr>
+<p><strong>糟糕的用户体验</strong></p>
+<ul>
+<li>Activity 启动时间过长</li>
+<li>应用无反应（ANR）</li>
+<li>帧速率差</li>
+</ul>
+<h4 id="关于帧"><a href="#关于帧" class="headerlink" title="关于帧"></a>关于帧</h4><p><strong>帧速率</strong></p>
+<ul>
+<li>为了保证能达到60fps，最多只有16ms去处理每一帧</li>
+<li>而保证能达到24fps，最多只有41ms去处理每一帧</li>
+</ul>
+<p><strong>常见操作耗时</strong></p>
+<ul>
+<li>Binder RPC 调用大约花费 0.12ms</li>
+<li>从闪存读取一个字节大约花费 5-25ms</li>
+<li>写内容到闪存大约花费 5-100ms</li>
+<li>TCP 初始化以及HTTP提取通常花费秒级的时间</li>
+</ul>
+<blockquote>
+<p>往磁盘写内容的时候，会随着磁盘的剩余空间的较少而导致写速率不断减低</p>
+</blockquote>
+<p><strong>永远不要做阻塞UI线程的事情，用一个新的线程去做可能会影响UI体验的事情</strong></p>
+<p>四种可以异步的实现：</p>
+<ol>
+<li>Runnable</li>
+<li>Thread</li>
+<li>Future</li>
+<li>ExecutorService</li>
+</ol>
+<ul>
+<li>使用Thread</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  	<span class="comment">// do some heavy work</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;).start();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用内置AsyncTask</li>
+</ul>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> AsyncTask&lt;URL, Integer, Integer&gt;() &#123;</span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">Long</span> doInBackground(URL... urls) &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> <span class="keyword">count</span> = urls.length;</span><br><span class="line">      <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">count</span>; i++ ) &#123;</span><br><span class="line">        Downloader.download(url);</span><br><span class="line">        publishProgress(i);</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">count</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">void</span> onProgressUpdate(Integer... progress) &#123;</span><br><span class="line">  	setProgress(progress[<span class="number">0</span>]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">void</span> onPostExecute(Integer result) &#123;</span><br><span class="line">  	showDialog(“Downloaded “ + result + “ files”);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用HandlerThread</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">HandlerThread mHandlerThread = <span class="keyword">new</span> HandlerThread(<span class="string">"WorkerThread"</span>);</span><br><span class="line">Handler <span class="keyword">handler</span> = <span class="keyword">new</span> Handler(mHandlerThread.getLooper()) &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (msg.what) &#123;</span><br><span class="line">      <span class="keyword">case</span> JOB_1:</span><br><span class="line">      	// do job #1</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> JOB_2:</span><br><span class="line">      	// do job #2</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">handler</span>.sendEmptyMessage(JOB_1);</span><br><span class="line"><span class="keyword">handler</span>.sendEmptyMessage(JOB_2);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">handler</span>.post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  	<span class="comment">// do more work</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  mHandlerThread.quit();</span><br><span class="line">  <span class="keyword">super</span>.onDestroy();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用AsyncQueryHandler</li>
+</ul>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> AsyncQueryHandler(getContentResolver()) &#123;</span><br><span class="line">  @Override</span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">void</span> onQueryComplete(<span class="built_in">int</span> token, <span class="keyword">Object</span> cookie,</span><br><span class="line">    Cursor <span class="built_in">cursor</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (token == <span class="number">0</span>) &#123;</span><br><span class="line">      	<span class="comment">// get data from cursor</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;.startQuery(<span class="number">0</span>, <span class="comment">// token</span></span><br><span class="line">        <span class="keyword">null</span>, <span class="comment">// cookie</span></span><br><span class="line">        RawContacts.CONTENT_URI, <span class="keyword">null</span>, <span class="comment">// projection</span></span><br><span class="line">        RawContacts.CONTACT_ID + <span class="string">"&lt;?"</span>, <span class="comment">// selection</span></span><br><span class="line">        <span class="keyword">new</span> <span class="keyword">String</span>[] &#123; <span class="string">"888"</span> &#125;, <span class="comment">// selectionArgs</span></span><br><span class="line">        RawContacts.DISPLAY_NAME_PRIMARY + <span class="string">" ASC"</span> <span class="comment">// orderby</span></span><br><span class="line">		);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用IntentService</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">WorkerService</span> <span class="keyword">extends</span> <span class="title">IntentService</span> </span>&#123;</span><br><span class="line">  public <span class="type">WorkerService</span>() &#123;</span><br><span class="line">    <span class="keyword">super</span>(<span class="string">"WorkerThread"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">protected</span> void onHandleIntent(<span class="type">Intent</span> intent) &#123;</span><br><span class="line">    <span class="type">String</span> action = intent.getAction();</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">"com.test.DO_JOB_1"</span>.equals(action)) &#123;</span><br><span class="line">    	<span class="comment">// do job #1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">startService(<span class="keyword">new</span> <span class="type">Intent</span>(<span class="string">"com.test.DO_JOB_1"</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="UI线程性能总结"><a href="#UI线程性能总结" class="headerlink" title="UI线程性能总结"></a>UI线程性能总结</h2><ul>
+<li>Activity or Fragment<ul>
+<li>AsyncTask</li>
+<li>Handler,HandlerThread</li>
+<li>AsyncTaskLoader</li>
+</ul>
+</li>
+<li>ContentProvider<ul>
+<li>AsyncQueryHandler</li>
+<li>CursorLoader</li>
+</ul>
+</li>
+<li>Service<ul>
+<li>IntentService</li>
+<li>Parcel.writeStrongBinder(IBinder binder)</li>
+</ul>
+</li>
+</ul>
+<h2 id="View-Hierarchy"><a href="#View-Hierarchy" class="headerlink" title="View Hierarchy"></a>View Hierarchy</h2><ul>
+<li>Measure</li>
+<li>Layout</li>
+<li>Draw</li>
+</ul>
+<ul>
+<li>Key Events</li>
+<li>Trackball Events</li>
+<li>Touch Evnets</li>
+</ul>
+<p><strong>Tips:</strong></p>
+<ul>
+<li><p>降低布局层次结构的复杂性</p>
+</li>
+<li><p>使用层次结构查看器来检查是否存在瓶颈</p>
+</li>
+<li><p>使用RelativeLayout或者GridLayout来简化复杂布局的层次嵌套</p>
+</li>
+<li><p>使用<strong><merge></merge></strong>标签来较少布局层次</p>
+</li>
+<li><p>使用<strong><viewstub></viewstub></strong>标签来延迟该标签下的布局的渲染</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;ViewStub</span><br><span class="line"><span class="symbol">android:</span>id=<span class="string">"@+id/stub_import"</span></span><br><span class="line"><span class="symbol">android:</span>inflatedId=<span class="string">"@+id/panel_import"</span></span><br><span class="line"><span class="symbol">android:</span>layout=<span class="string">"@layout/progress_overlay"</span></span><br><span class="line"><span class="symbol">android:</span>layout_width=<span class="string">"fill_parent"</span></span><br><span class="line"><span class="symbol">android:</span>layout_height=<span class="string">"wrap_content"</span></span><br><span class="line"><span class="symbol">android:</span>layout_gravity=<span class="string">"bottom"</span> /&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">((ViewStub)</span><br><span class="line">findViewById(<span class="keyword">R</span>.id.stub_import)).setVisibility(<span class="keyword">View</span>.VISIBLE)<span class="comment">;</span></span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">View</span> importPanel = ((ViewStub)</span><br><span class="line">findViewById(<span class="keyword">R</span>.id.stub_import)).inflate()<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用layoutopt检测常见问题</p>
+</li>
+</ul>
+<h2 id="I-O性能优化"><a href="#I-O性能优化" class="headerlink" title="I/O性能优化"></a>I/O性能优化</h2><ul>
+<li><p>异步写SharedPreferences</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SharedPreferences<span class="selector-class">.Editor</span><span class="selector-class">.apply</span>(); <span class="comment">// 异步</span></span><br><span class="line">SharedPreferences<span class="selector-class">.Editor</span><span class="selector-class">.commit</span>(); <span class="comment">// 同步</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数据库query查询语句中的 *  替换成具体的列值</p>
+</li>
+<li><p>使用TraceView配置您的数据库查询</p>
+</li>
+<li><p>使用LIMIT子句减少选择行</p>
+</li>
+<li><p>最小化完整窗口时间</p>
+</li>
+<li><p>使用索引优化数据库查询</p>
+</li>
+<li><p>预编译常用的SQL语句</p>
+</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">String </span>sql = “INSERT INTO table VALUES (?, ?)”<span class="comment">;</span></span><br><span class="line"><span class="symbol">SQLiteStatement</span> <span class="keyword">stmt </span>= mDatabase.compileStatement(sql)<span class="comment">;</span></span><br><span class="line"><span class="symbol">DatabaseUtils.bindObjectToProgram</span>(<span class="keyword">stmt, </span><span class="number">1</span>, <span class="number">1</span>)<span class="comment">;</span></span><br><span class="line"><span class="symbol">DatabaseUtils.bindObjectToProgram</span>(<span class="keyword">stmt, </span><span class="number">2</span>, <span class="number">2</span>)<span class="comment">;</span></span><br><span class="line"><span class="keyword">stmt.execute();</span><br><span class="line"></span><span class="keyword">stmt.close();</span><br><span class="line"></span></span><br><span class="line">//或者使用 PreparaStatement</span><br></pre></td></tr></table></figure>
+<ul>
+<li>推迟ContentObserver.onChange（）中的自动重新检查</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">getContentResolver().registerContentObserver(uri, <span class="keyword">true</span>,</span><br><span class="line">  <span class="keyword">new</span> ContentObserver(<span class="keyword">new</span> Handler()) &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onChange</span><span class="params">(<span class="keyword">boolean</span> selfChange)</span> </span>&#123;</span><br><span class="line">      mDirty = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onResume();</span><br><span class="line">    <span class="keyword">if</span> (mDirty) &#123;</span><br><span class="line">      <span class="comment">// start query again</span></span><br><span class="line">      mDirty = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>在事务中使用批量操作</p>
+<ul>
+<li>ContentProviderOperation!</li>
+<li>ContentProviderOperation.Builder!</li>
+<li>ContentResolver.applyBatch()</li>
+</ul>
+</li>
+<li><p>在一个比较长的事务中允许偶尔的事务提前</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">SQLiteDatabase</span><span class="selector-class">.yieldIfContendedSafely</span>()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用事件日志调试</p>
+<blockquote>
+<p>adb logcat -b events content_query_sample:I <em>:S<br>adb logcat -b events content_update_sample:I </em>:S<br>adb logcat -b events db_sample:I *:S</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="滑动性能优化（List）"><a href="#滑动性能优化（List）" class="headerlink" title="滑动性能优化（List）"></a>滑动性能优化（List）</h2><ul>
+<li><p>ListView : 通过复用view来避免不必要的inflate操作</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="function">View <span class="title">getView</span><span class="params">(<span class="keyword">int</span> position, View convertView, ViewGroup parent)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (convertView == <span class="keyword">null</span>) &#123;</span><br><span class="line">  	convertView = mInflater.inflate(R.layout.main, parent, <span class="keyword">false</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过ViewHolder缓存v试图，而避免不必要的findViewByI’d</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@<span class="function">Override</span><br><span class="line"><span class="keyword">public</span> View <span class="title">getView</span>(<span class="params"><span class="keyword">int</span> position, View convertView, ViewGroup parent</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (convertView == <span class="literal">null</span>) &#123;</span><br><span class="line">    convertView = mInflater.inflate(R.layout.main, parent, <span class="literal">false</span>);</span><br><span class="line">    ViewHolder holder = <span class="keyword">new</span> ViewHolder();</span><br><span class="line">    holder.img = (ImageView) convertView.findViewById(R.id.image);</span><br><span class="line">    holder.txt = (TextView) convertView.findViewById(R.id.text);</span><br><span class="line">    convertView.setTag(holder);</span><br><span class="line">  &#125;</span><br><span class="line">  ViewHolder holder = (ViewHolder) convertView.getTag();</span><br><span class="line">  holder.img.setImageResource(R.drawable.icon);</span><br><span class="line">  holder.txt.setText(R.<span class="keyword">string</span>.hello);</span><br><span class="line">  <span class="keyword">return</span> convertView;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ViewHolder</span> &#123;</span><br><span class="line">  ImageView img;</span><br><span class="line">  TextView txt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>避免view的不必要绘制（例如背景的重复绘制）</p>
+<blockquote>
+<p>Android 中 会绘制每一个父view即使它被覆盖在一个不透明的子view之下</p>
+<p>当你有一个父view并且是永远不可见的，那么不要绘制它（包括他的背景）</p>
+</blockquote>
+</li>
+<li><p>大多数的情况下你不需要绘制window的背景</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Activity中</span></span><br><span class="line">getWindow().setBackgroundDrawable(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//style中</span></span><br><span class="line"><span class="string">android:</span>windowBackground=<span class="string">"@null"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>避免在运行时进行图片缩放（特殊业务需求除外）</p>
+</li>
+<li><p>避免在视图（ListView等）滚动的时候进行动画，如果业务要求使用动画，那么请关闭绘制缓存</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ListView.setDrawableCacheEnabled(<span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用Allocation Tracker（内存分配追踪器）检测并避免频繁的垃圾回收</p>
+</li>
+<li><p>考虑使用Object Pool  ，StringBuilder等封装类型</p>
+</li>
+<li><p>缓存的时候考虑使用SoftReference</p>
+</li>
+<li><p>在调试模式的时候启用StrictMode(可以检查大部分不规范，不安全操作)</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">public</span> <span class="selector-tag">void</span> <span class="selector-tag">onCreate</span>() &#123;</span><br><span class="line">  <span class="selector-tag">if</span> (DEVELOPER_MODE) &#123;</span><br><span class="line">        StrictMode<span class="selector-class">.setThreadPolicy</span>(new StrictMode.ThreadPolicy.Builder()</span><br><span class="line">        	.detectDiskReads()</span><br><span class="line">        	.detectDiskWrites()</span><br><span class="line">        	.detectNetwork()</span><br><span class="line">        	.penaltyLog()</span><br><span class="line">        	.build());</span><br><span class="line">        StrictMode<span class="selector-class">.setVmPolicy</span>(new StrictMode.VmPolicy.Builder()</span><br><span class="line">        	.detectLeakedSqlLiteObjects()</span><br><span class="line">        	.detectLeakedClosableObjects()</span><br><span class="line">        	.penaltyLog()</span><br><span class="line">        	.penaltyDeath()</span><br><span class="line">        	.build());</span><br><span class="line">    &#125;</span><br><span class="line">  super<span class="selector-class">.onCreate</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查主线程Looper是否有不必要的活动</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Looper<span class="selector-class">.setMessageLogging</span>();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h1><blockquote>
+<p>在系统级别，Android使用低内存驱动程序运行修改过的OOM Killer</p>
+</blockquote>
+<p>包括：</p>
+<ul>
+<li>Linux OOM killer</li>
+<li>OOM_ADJ</li>
+<li>Android Low Memory Killer</li>
+</ul>
+<p><strong>Android中的低内存阈值(init.rc中)</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># <span class="selector-tag">Define</span> <span class="selector-tag">the</span> <span class="selector-tag">memory</span> <span class="selector-tag">thresholds</span> <span class="selector-tag">at</span> <span class="selector-tag">which</span> <span class="selector-tag">the</span> <span class="selector-tag">above</span> <span class="selector-tag">process</span> <span class="selector-tag">classes</span> <span class="selector-tag">will</span></span><br><span class="line"># <span class="selector-tag">be</span> <span class="selector-tag">killed</span>. <span class="selector-tag">These</span> <span class="selector-tag">numbers</span> <span class="selector-tag">are</span> <span class="selector-tag">in</span> <span class="selector-tag">pages</span> (4<span class="selector-tag">k</span>).</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.FOREGROUND_APP_MEM</span> 2048</span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.VISIBLE_APP_MEM</span> 3072</span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.PERCEPTIBLE_APP_MEM</span> 4096</span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.HEAVY_WEIGHT_APP_MEM</span> 4096</span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.SECONDARY_SERVER_MEM</span> 6144</span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.BACKUP_APP_MEM</span> 6144</span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.HOME_APP_MEM</span> 6144</span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.HIDDEN_APP_MEM</span> 7168</span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.EMPTY_APP_MEM</span> 8192</span><br></pre></td></tr></table></figure>
+<p><strong>OOM_ADJ基于重要性级别(init.rc中)</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># <span class="selector-tag">Define</span> <span class="selector-tag">the</span> <span class="selector-tag">oom_adj</span> <span class="selector-tag">values</span> <span class="selector-tag">for</span> <span class="selector-tag">the</span> <span class="selector-tag">classes</span> <span class="selector-tag">of</span> <span class="selector-tag">processes</span> <span class="selector-tag">that</span> <span class="selector-tag">can</span> <span class="selector-tag">be</span> </span><br><span class="line"># <span class="selector-tag">killed</span> <span class="selector-tag">by</span> <span class="selector-tag">the</span> <span class="selector-tag">kernel</span>. <span class="selector-tag">These</span> <span class="selector-tag">are</span> <span class="selector-tag">used</span> <span class="selector-tag">in</span> <span class="selector-tag">ActivityManagerService</span>. </span><br><span class="line"></span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.FOREGROUND_APP_ADJ</span> 0 </span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.VISIBLE_APP_ADJ</span> 1 </span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.PERCEPTIBLE_APP_ADJ</span> 2 </span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.HEAVY_WEIGHT_APP_ADJ</span> 3 </span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.SECONDARY_SERVER_ADJ</span> 4 </span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.BACKUP_APP_ADJ</span> 5 </span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.HOME_APP_ADJ</span> 6 </span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.HIDDEN_APP_MIN_ADJ</span> 7 </span><br><span class="line"><span class="selector-tag">setprop</span> <span class="selector-tag">ro</span><span class="selector-class">.EMPTY_APP_ADJ</span> 15</span><br></pre></td></tr></table></figure>
+<p><strong>进程重要性级别</strong></p>
+<ul>
+<li>Persistent(持续存在)<ul>
+<li>OOM_ADJ &lt; 0</li>
+<li>system_server (-16)  , com.android.phone (-12)</li>
+</ul>
+</li>
+<li>Foreground(前台进程)<ul>
+<li>FOREGROUND_APP_ADJ = 0</li>
+<li>运行前台Activity</li>
+<li>运行一个Service，执行onCreate（），onStartCommand（），onDestroy（）</li>
+<li>托管由前台Activity或前台进程绑定的Service</li>
+<li>运行一个BroadcastReceiver，执行onReceive（）</li>
+<li>托管由持续或前台进程使用的ContentProvider</li>
+</ul>
+</li>
+<li>Visible（可见进程）<ul>
+<li>VISIBLE_APP_ADJ = 1</li>
+<li>运行可见的Activity（不在前台，也就是，不是正在和用户交互的）</li>
+<li>运行由startService()启动的Service，Service使用startForeground()<br>使自己处于前台状态</li>
+</ul>
+</li>
+<li>Service(服务进程)<ul>
+<li>SECONDARY_SERVER_ADJ = 4</li>
+<li>运行由startService()启动Service，并且不是可见进程</li>
+</ul>
+</li>
+<li>Background(后台进程)<ul>
+<li>HIDDEN_APP_MIN_ADJ (7) .. EMPTY_APP_ADJ (15)</li>
+<li>不包含任何活动应用程序组件的进程</li>
+</ul>
+</li>
+</ul>
+<p><strong>Low Memory 回调</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">Activity</span><span class="selector-class">.onLowMemory</span>()</span><br><span class="line"><span class="selector-tag">Fragment</span><span class="selector-class">.onLowMemory</span>()</span><br><span class="line"><span class="selector-tag">Activity</span><span class="selector-class">.onSaveInstanceState</span>(<span class="selector-tag">Bundle</span>)</span><br><span class="line"><span class="selector-tag">Service</span><span class="selector-class">.onLowMemory</span>()</span><br><span class="line"><span class="selector-tag">ContentProvider</span><span class="selector-class">.onLowMemory</span>()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在应用程序级别，Android限制了多少内存可以分配给每个应用程序。</p>
+<p>Android为每个应用程序定义了一个堆限制,并指示何时抛出OutOfMemoryError</p>
+</blockquote>
+<p>Android Studio 中 Heap窗口中的相关术语</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">术语</th>
+<th style="text-align:center">解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Heap limit</td>
+<td style="text-align:center">应用在Dalvik堆中的最大允许占用空间</td>
+</tr>
+<tr>
+<td style="text-align:center">Heap size</td>
+<td style="text-align:center">当前Dalvik堆的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">Allocated</td>
+<td style="text-align:center">应用在Dalvik堆上分配的字节总数</td>
+</tr>
+<tr>
+<td style="text-align:center">Free</td>
+<td style="text-align:center">Heap size – Allocated</td>
+</tr>
+<tr>
+<td style="text-align:center">% Used</td>
+<td style="text-align:center">Allocated / Heap size * 100%</td>
+</tr>
+<tr>
+<td style="text-align:center">External allocation (3.0之前)</td>
+<td style="text-align:center">Bitmap byte[]</td>
+</tr>
+</tbody>
+</table>
+<p>ActivityManager.getMemoryClass() 可以查看当前应用Heap size limit</p>
+<p><strong>OOM 发生的情形</strong></p>
+<ul>
+<li>3.0之前</li>
+</ul>
+<p>Heap size + external allocation + new allocation request &gt;= Heap limit</p>
+<ul>
+<li><p>3.0（包括）之后</p>
+<p>Heap size + new allocation request &gt;= Heap limit</p>
+</li>
+</ul>
+<blockquote>
+<p>new allocation request : 新的内存开辟请求大小</p>
+</blockquote>
+<p><strong>不代表进程内存使用的情形</strong></p>
+<ul>
+<li>每个进程从zygote fork出来后，都会有2mb以上的开销</li>
+<li>在使用native的时候会开辟更多的内存：<ul>
+<li>Android应用程序运行在Dalvik VM中，同时通过JNI加载本地库</li>
+<li>由应用程序调用的Dalvik级API可以代表申请人使用本机库。</li>
+</ul>
+</li>
+<li>如果你启用了硬件加速（4.0中默认开启），那么会多有8mb的内存去使用OpenGL</li>
+</ul>
+<h4 id="查看内存使用情况"><a href="#查看内存使用情况" class="headerlink" title="查看内存使用情况"></a>查看内存使用情况</h4><ul>
+<li>根据进程内存使用情况排序：</li>
+</ul>
+<p>adb shell procrank -p</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">PID Vss Rss Pss Uss cmdline!</span><br><span class="line"><span class="number">3156</span> <span class="number">80272</span><span class="keyword">K</span> <span class="number">80220</span><span class="keyword">K</span> <span class="number">59228</span><span class="keyword">K</span> <span class="number">57624</span><span class="keyword">K</span> com.htc.launcher</span><br><span class="line"><span class="number">1455</span> <span class="number">94540</span><span class="keyword">K</span> <span class="number">58728</span><span class="keyword">K</span> <span class="number">37488</span><span class="keyword">K</span> <span class="number">36060</span><span class="keyword">K</span> system_server</span><br><span class="line"><span class="number">9000</span> <span class="number">55224</span><span class="keyword">K</span> <span class="number">55200</span><span class="keyword">K</span> <span class="number">33900</span><span class="keyword">K</span> <span class="number">32412</span><span class="keyword">K</span> com.roguso.plurk</span><br><span class="line"><span class="number">6713</span> <span class="number">47912</span><span class="keyword">K</span> <span class="number">47880</span><span class="keyword">K</span> <span class="number">27719</span><span class="keyword">K</span> <span class="number">26788</span><span class="keyword">K</span> tw.anddev.aplurk</span><br><span class="line"><span class="number">1624</span> <span class="number">44804</span><span class="keyword">K</span> <span class="number">44760</span><span class="keyword">K</span> <span class="number">24954</span><span class="keyword">K</span> <span class="number">24200</span><span class="keyword">K</span> android.process.acore</span><br><span class="line"><span class="number">2081</span> <span class="number">44992</span><span class="keyword">K</span> <span class="number">44960</span><span class="keyword">K</span> <span class="number">23205</span><span class="keyword">K</span> <span class="number">21628</span><span class="keyword">K</span> com.htc.android.mail</span><br><span class="line"><span class="number">1604</span> <span class="number">41288</span><span class="keyword">K</span> <span class="number">41248</span><span class="keyword">K</span> <span class="number">22393</span><span class="keyword">K</span> <span class="number">21752</span><span class="keyword">K</span> com.htc.android.htcime</span><br><span class="line"><span class="number">1594</span> <span class="number">40912</span><span class="keyword">K</span> <span class="number">40844</span><span class="keyword">K</span> <span class="number">21588</span><span class="keyword">K</span> <span class="number">20284</span><span class="keyword">K</span> com.htc.weatheridlescreen</span><br><span class="line"><span class="number">1622</span> <span class="number">39904</span><span class="keyword">K</span> <span class="number">39872</span><span class="keyword">K</span> <span class="number">21297</span><span class="keyword">K</span> <span class="number">20696</span><span class="keyword">K</span> com.android.phone</span><br></pre></td></tr></table></figure>
+<p>VSS（Virtual Set Size）：进程可以访问的页面总数</p>
+<p>RSS（Resident Set Size）: RAM中进程可以访问的页总数</p>
+<p>PSS（Proportion Set Size）：进程在RAM中使用的页面总数，其中每个页面的大小是页面总数除以共享它的进程数</p>
+<p>USS（Unique Set Size）：进程可以访问的非共享页面的数量</p>
+<ul>
+<li><p>列出进程的虚拟内存区域</p>
+<p> adb shell procmem -p <pid></pid></p>
+</li>
+</ul>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Vss Rss Pss Uss ShCl ShDi PrCl PrDi Name</span><br><span class="line">------- ------- ------- ------- ------- ------- ------- ------- </span><br><span class="line"><span class="number">4</span><span class="keyword">K</span> <span class="number">4</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">4</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> /system/bin/app_process</span><br><span class="line"><span class="number">4</span><span class="keyword">K</span> <span class="number">4</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">4</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> /system/bin/app_process</span><br><span class="line"><span class="number">13908</span><span class="keyword">K</span> <span class="number">13908</span><span class="keyword">K</span> <span class="number">11571</span><span class="keyword">K</span> <span class="number">11508</span><span class="keyword">K</span> <span class="number">2400</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">11508</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> [heap]</span><br><span class="line"><span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> [heap]</span><br><span class="line"><span class="number">4</span><span class="keyword">K</span> <span class="number">4</span><span class="keyword">K</span> <span class="number">4</span><span class="keyword">K</span> <span class="number">4</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">4</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> [heap]</span><br><span class="line"><span class="number">36</span><span class="keyword">K</span> <span class="number">36</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">36</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> <span class="number">0</span><span class="keyword">K</span> /dev/__properties__</span><br><span class="line">.......</span><br></pre></td></tr></table></figure>
+<p>adb shell dumpsys meminfo <pid></pid></p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Applications Memory Usage (kB):</span><br><span class="line">Uptime: <span class="number">89133197</span> Realtime: <span class="number">106110266</span></span><br><span class="line"></span><br><span class="line">** MEMINFO in pid <span class="number">11961</span> [com.htc.friendstream] **</span><br><span class="line">				native dalvik other total limit bitmap nativeBmp</span><br><span class="line">		  size: <span class="number">15032</span>  <span class="number">8535</span>   N/<span class="keyword">A</span>   <span class="number">23567 32768</span> N/<span class="keyword">A</span>    N/<span class="keyword">A</span></span><br><span class="line">	 allocated: <span class="number">14565</span>  <span class="number">5697</span>   N/<span class="keyword">A</span>   <span class="number">20262</span> N/<span class="keyword">A</span>   <span class="number">4669</span>   <span class="number">1918</span></span><br><span class="line">		  free: <span class="number">162</span>    <span class="number">2838</span>   N/<span class="keyword">A</span>   <span class="number">3000</span>  N/<span class="keyword">A</span>   N/<span class="keyword">A</span>    N/<span class="keyword">A</span></span><br><span class="line">		 (Pss): <span class="number">4105</span>   <span class="number">2550</span>   <span class="number">13952 20607</span> N/<span class="keyword">A</span>   N/<span class="keyword">A</span>    N/<span class="keyword">A</span></span><br><span class="line">(shared dirty): <span class="number">2440</span>   <span class="number">1928</span>   <span class="number">5532</span>  <span class="number">9900</span>  N/<span class="keyword">A</span>   N/<span class="keyword">A</span>    N/<span class="keyword">A</span></span><br><span class="line">  (priv dirty): <span class="number">4044</span>   <span class="number">708</span>    <span class="number">12716 17468</span> N/<span class="keyword">A</span>   N/<span class="keyword">A</span>    N/<span class="keyword">A</span></span><br><span class="line"></span><br><span class="line">Objects</span><br><span class="line">		   Views: <span class="number">0</span> ViewRoots: <span class="number">0</span></span><br><span class="line">     AppContexts: <span class="number">0</span> Activities: <span class="number">0</span></span><br><span class="line">	 	  Assets: <span class="number">7</span> AssetManagers: <span class="number">7</span></span><br><span class="line">   Local Binders: <span class="number">11</span> Proxy Binders: <span class="number">15</span></span><br><span class="line">Death Recipients: <span class="number">1</span></span><br><span class="line"> OpenSSL Sockets: <span class="number">0</span>!</span><br></pre></td></tr></table></figure>
+<p><strong>Private Dirty = USS</strong></p>
+<p>无法分页到磁盘并且不与任何其他进程共享的进程内部RAM量</p>
+<p>当进程消失时，系统可以使用的RAM</p>
+<ul>
+<li>一些重要的虚拟内存区域</li>
+</ul>
+<p>/dev/ashmem/dalvik-heap : 在Dalvik级别为堆分配的匿名页面</p>
+<p>[heap], [anonymous] : 由malloc（）在本机级别分配的匿名页面</p>
+<p>/system/framework/*.odex (release build)</p>
+<p>/data/dalvik-cache/*.odex (debug build) : 文件支持的mmap页面</p>
+<h3 id="Garbage-collection-垃圾收集"><a href="#Garbage-collection-垃圾收集" class="headerlink" title="Garbage collection(垃圾收集)"></a>Garbage collection(垃圾收集)</h3><ul>
+<li><ol>
+<li>0之前的GC:</li>
+</ol>
+<p>收集垃圾的时候会停止其他所有的工作</p>
+<p>对整个堆进行收集</p>
+<p>造成的暂停时间一般都大于100ms</p>
+</li>
+<li><p>3.0及其之后</p>
+<p>不会暂停其他工作，而是与其他工作同时进行（绝大部分是这样的）</p>
+<p>一次垃圾收集只是对堆的一部分而已</p>
+<p>造成的暂停时间一般小于5ms</p>
+</li>
+</ul>
+<h3 id="Memory-leaks-内存泄露"><a href="#Memory-leaks-内存泄露" class="headerlink" title="Memory leaks(内存泄露)"></a>Memory leaks(内存泄露)</h3><ul>
+<li>GC并不能避免内存泄露</li>
+<li>有一个指向长期存在的且未使用的对象的应用，导致这个不被使用的对象不能被回收</li>
+<li>在Android中，通常发生内存泄露的是对Context或者Activity的引用</li>
+</ul>
+<p><strong>常见的因为Context 或着 Activity造成的内存泄露</strong></p>
+<ol>
+<li><p>在Activity中存在长期存在的指向非静态内部类实例对象的引用</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">TestActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span></span>&#123;</span><br><span class="line">  static <span class="type">LeakyTest</span> leaky = <span class="literal">null</span>;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">LeakyTest</span></span>&#123;</span><br><span class="line">    void doSoming()&#123;</span><br><span class="line">      <span class="comment">//doing</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">protected</span> void onCreate(<span class="type">Bundle</span> saveInstanceStates)&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(saveInstanceStates);</span><br><span class="line">    <span class="keyword">if</span>(leaky==<span class="literal">null</span>)</span><br><span class="line">      leaky = <span class="keyword">new</span> <span class="type">LeakyTest</span>();</span><br><span class="line">    <span class="comment">//....</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//.....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在Activity中有超出Activity生命周期且长期存活的线程</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">new Thread(new Runnable()&#123;</span><br><span class="line">  @Override</span><br><span class="line"> <span class="keyword"> public</span> void run()&#123;</span><br><span class="line">    //do<span class="built_in"> long-live </span>works</span><br><span class="line">  &#125;</span><br><span class="line">&#125;).start();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>有用的方法</strong></p>
+<ul>
+<li>使用logcat检查是否有内存随着时间的推移而不断增加（尤其注意某些方法的执行步骤！）</li>
+</ul>
+<p>例如得到的日志信息：</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">D</span>/dalvikvm(<span class="number">9050</span>):GC_CONCURRENT free <span class="number">2049</span><span class="keyword">k</span>, <span class="number">65</span>% free  <span class="number">3571</span><span class="keyword">k</span>/<span class="number">9991</span><span class="keyword">k</span>, external <span class="number">4703</span><span class="keyword">k</span>/<span class="number">5261</span><span class="keyword">k</span>, paused <span class="number">2</span>ms+<span class="number">2</span>ms</span><br></pre></td></tr></table></figure>
+<p>D/dalvikvm(9050): <u>GC_CONCURRENT</u> free 2049k, 65% free  3571k/9991k, external 4703k/5261k, paused 2ms+2ms</p>
+<p>下划线处GC的原因：</p>
+<p>GC_CONCURRENT</p>
+<p>GC_FOR_MALLOC</p>
+<p>GC_EXTERNAL_ALLOC</p>
+<p>GC_HPROF_DUMP_HEAP</p>
+<p>GC_EXPLICIT</p>
+<p>D/dalvikvm(9050): GC_CONCURRENT <u>free 2049k</u>, 65% free  3571k/9991k, external 4703k/5261k, paused 2ms+2ms</p>
+<p>下划线处GC的原因：</p>
+<p>内存释放</p>
+<p>D/dalvikvm(9050): GC_CONCURRENT free 2049k, <u>65% free  3571k/9991k</u>, external 4703k/5261k, paused 2ms+2ms</p>
+<p>下划线处GC的原因：</p>
+<p>内存释放</p>
+<p>堆进行信息统计</p>
+<p>D/dalvikvm(9050): GC_CONCURRENT free 2049k, 65% free  3571k/9991k, <u>external 4703k/5261k,</u> paused 2ms+2ms</p>
+<p>下划线处GC的原因：</p>
+<p>内存释放</p>
+<p>堆进行信息统计</p>
+<p>内部内存进行信息统计</p>
+<p>D/dalvikvm(9050): GC_CONCURRENT free 2049k, 65% free  3571k/9991k, external 4703k/5261k, <u>paused 2ms+2ms</u></p>
+<p>下划线处GC的原因：</p>
+<p>内存释放</p>
+<p>堆进行信息统计</p>
+<p>内部内存进行信息统计</p>
+<p>时间暂停</p>
+<ul>
+<li>使用分配跟踪器查看是否有随着时间分配未预料的对象（Android Studio中的logcat窗口中有对应的按钮）</li>
+<li>使用（Histogram view）直方图视图查看活动实例的数量。 有多于一个Activity的一个实例，那么这是一个强烈的Activity / Context泄露的迹象。</li>
+<li>按保留大小排序的Dominator Tree视图有助于识别保留了大量的内存且不能被释放的对象。 他们通常是找到内存泄漏的好起点。</li>
+</ul>
+<p><strong>强烈推荐郭神关于内存泄露分析的文章：</strong></p>
+<p> <a href="http://blog.csdn.net/sinyu890807/article/details/42238633" target="_blank" rel="external">Android最佳性能实践(二)——分析内存的使用情况</a></p>
+<h2 id="其他优化建议"><a href="#其他优化建议" class="headerlink" title="其他优化建议"></a>其他优化建议</h2><ul>
+<li><p>造成OutOfMemoryError的原因通常是Bitmap或者对象进行了太多的内存分配</p>
+<p>加载图片的时候尽可能不要加载原尺寸的大图，可以使用缩略图</p>
+<p>回收已经不使用的Bitmap资源bitmap.recycle().</p>
+<blockquote>
+<p>2.3（包括）之前，Bitmap的引用是放在堆中的，而Bitmap的数据部分是放在栈中的，需要用户调用recycle方法手动进行内存回收 ，2.3之后，整个Bitmap，包括数据和引用，都放在了堆中，这样，整个Bitmap的回收就全部交给GC了，这个recycle方法就再也不需要使用了。</p>
+</blockquote>
+<p>列表中加载图片注意使用小图，以及做好缓存工作</p>
+<p>尽可能的避免碎片化</p>
+<p>减少在应用堆空间堆快满的时候再堆分配</p>
+<p>缓存中使用SoftReference</p>
+<p>使用WeakReference避免堆存泄露</p>
+</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//缩放图片</span></span><br><span class="line">BitmapFactory.Options opts = <span class="keyword">new</span> BitmapFactory.Options();</span><br><span class="line">opts.inJustDecodeBounds = <span class="keyword">true</span>;</span><br><span class="line">BitmapFactory.decodeFile(path, opts);</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> originalWidth = opts.outWidth;</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> originalHeight = opts.outHeight;</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> originalDim = Math.max(originalWidth, originalHeight);</span><br><span class="line">opts = <span class="keyword">new</span> BitmapFactory.Options();</span><br><span class="line">opts.inSampleSize = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> ( originalDim &gt; MAX_IMAGE_DIM ) &#123;</span><br><span class="line">  opts.inSampleSize *= <span class="number">2</span>;</span><br><span class="line">  originalDim /= <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">return</span> BitmapFactory.<span class="title">decodeFile</span><span class="params">(path, opts)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对比之间的例子，这里改成了静态内部类</span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">  static <span class="type">Leaky</span> leak = <span class="literal">null</span>;</span><br><span class="line">  static <span class="class"><span class="keyword">class</span> <span class="title">Leaky</span> </span>&#123;</span><br><span class="line">    void doSomething() &#123;</span><br><span class="line">        <span class="comment">//doing</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  public void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">  	<span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    <span class="keyword">if</span> (leak == <span class="literal">null</span>) &#123;</span><br><span class="line">      leak = <span class="keyword">new</span> <span class="type">Leaky</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line"><span class="keyword">static</span> Leaky leak = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Leaky</span> </span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Context mContext; <span class="comment">//final修饰</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Leaky</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>();</span><br><span class="line">    mContext = context;</span><br><span class="line">    doSomethingWithOuterInstance();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">doSomethingWithOuterInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String text = mContext.getString(R.string.hello);</span><br><span class="line">    System.out.println(text);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">  <span class="keyword">if</span> (leak == <span class="keyword">null</span>) &#123;</span><br><span class="line">      leak = <span class="keyword">new</span> Leaky(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line"><span class="keyword">static</span> Leaky leak = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Leaky</span> </span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> WeakReference&lt;Context&gt; mContext;<span class="comment">//使用了弱引用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Leaky</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">super</span>();</span><br><span class="line">  mContext = <span class="keyword">new</span> WeakReference&lt;Context&gt;(context);</span><br><span class="line">  doSomethingWithOuterInstance();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doSomethingWithOuterInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Context context = mContext.get();</span><br><span class="line">  <span class="keyword">if</span> (context != <span class="keyword">null</span>) &#123;</span><br><span class="line">    String text = context.getString(R.string.hello);</span><br><span class="line">    System.out.println(text);</span><br><span class="line">  &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">  <span class="keyword">if</span> (leak == <span class="keyword">null</span>) &#123;</span><br><span class="line">  	leak = <span class="keyword">new</span> Leaky(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更多优化建议，请移步郭神博客</p>
+<p><a href="http://blog.csdn.net/sinyu890807/article/details/42238627" target="_blank" rel="external">Android最佳性能实践</a></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android性能优化/" rel="tag">#Android性能优化</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/13/再温排序/" rel="next" title="再温排序">
+                <i class="fa fa-chevron-left"></i> 再温排序
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/25/Android-性能优化总结/"
+           data-title="Android 性能优化总结" data-url="dooogo.github.io/2016/10/25/Android-性能优化总结/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="dooogo" />
+          <p class="site-author-name" itemprop="name">dooogo</p>
+          <p class="site-description motion-element" itemprop="description">若无力驾驭，自由便是负担</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1853941987/home?wvr=5" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/donlan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/04c42edcd1bb/latest_articles" target="_blank" title="简书">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#将从以下几个方面总结Android的应用性能优化"><span class="nav-number">1.</span> <span class="nav-text">将从以下几个方面总结Android的应用性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#性能"><span class="nav-number">1.1.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存"><span class="nav-number">1.2.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于帧"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">关于帧</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UI线程性能总结"><span class="nav-number">1.3.</span> <span class="nav-text">UI线程性能总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#View-Hierarchy"><span class="nav-number">1.4.</span> <span class="nav-text">View Hierarchy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O性能优化"><span class="nav-number">1.5.</span> <span class="nav-text">I/O性能优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#滑动性能优化（List）"><span class="nav-number">1.6.</span> <span class="nav-text">滑动性能优化（List）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Memory"><span class="nav-number">2.</span> <span class="nav-text">Memory</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看内存使用情况"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">查看内存使用情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Garbage-collection-垃圾收集"><span class="nav-number">2.0.1.</span> <span class="nav-text">Garbage collection(垃圾收集)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory-leaks-内存泄露"><span class="nav-number">2.0.2.</span> <span class="nav-text">Memory leaks(内存泄露)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他优化建议"><span class="nav-number">2.1.</span> <span class="nav-text">其他优化建议</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dooogo</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"doogo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
