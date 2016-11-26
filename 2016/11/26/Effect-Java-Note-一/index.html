@@ -1,0 +1,894 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Effect Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Effect Java Note (一)一、对象的创建和销毁1. 考虑使用静态工厂方法替代构造器优点
+
+静态工厂方法可以有一个名称，易于理解与阅读，工厂方法的名称可以凸显出不同构造器的区别
+每次掉用的时候可以不用都创建一个新的对象，而是可以选择复用对象，在一些情况就可以直接使用==判断相等，而不是equals
+可以返回原返回类型的任意子类型。可以参考java的集合框架。使用接口来引用被返回的对象，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effect Java Note(一)">
+<meta property="og:url" content="dooogo.github.io/2016/11/26/Effect-Java-Note-一/index.html">
+<meta property="og:site_name" content="Doing And Going">
+<meta property="og:description" content="Effect Java Note (一)一、对象的创建和销毁1. 考虑使用静态工厂方法替代构造器优点
+
+静态工厂方法可以有一个名称，易于理解与阅读，工厂方法的名称可以凸显出不同构造器的区别
+每次掉用的时候可以不用都创建一个新的对象，而是可以选择复用对象，在一些情况就可以直接使用==判断相等，而不是equals
+可以返回原返回类型的任意子类型。可以参考java的集合框架。使用接口来引用被返回的对象，">
+<meta property="og:updated_time" content="2016-11-26T13:28:46.533Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Effect Java Note(一)">
+<meta name="twitter:description" content="Effect Java Note (一)一、对象的创建和销毁1. 考虑使用静态工厂方法替代构造器优点
+
+静态工厂方法可以有一个名称，易于理解与阅读，工厂方法的名称可以凸显出不同构造器的区别
+每次掉用的时候可以不用都创建一个新的对象，而是可以选择复用对象，在一些情况就可以直接使用==判断相等，而不是equals
+可以返回原返回类型的任意子类型。可以参考java的集合框架。使用接口来引用被返回的对象，">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Effect Java Note(一) | Doing And Going </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a393584c41c219603e4e068220d7084f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1260880910&web_id=1260880910" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Doing And Going</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Effect Java Note(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-26T21:27:16+08:00" content="2016-11-26">
+              2016-11-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/26/Effect-Java-Note-一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/26/Effect-Java-Note-一/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/11/26/Effect-Java-Note-一/" class="leancloud_visitors" data-flag-title="Effect Java Note(一)">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Effect-Java-Note-一"><a href="#Effect-Java-Note-一" class="headerlink" title="Effect Java Note (一)"></a>Effect Java Note (一)</h1><h3 id="一、对象的创建和销毁"><a href="#一、对象的创建和销毁" class="headerlink" title="一、对象的创建和销毁"></a>一、对象的创建和销毁</h3><h4 id="1-考虑使用静态工厂方法替代构造器"><a href="#1-考虑使用静态工厂方法替代构造器" class="headerlink" title="1. 考虑使用静态工厂方法替代构造器"></a>1. 考虑使用静态工厂方法替代构造器</h4><p><strong>优点</strong></p>
+<ol>
+<li>静态工厂方法可以有一个名称，易于理解与阅读，工厂方法的名称可以凸显出不同构造器的区别</li>
+<li>每次掉用的时候可以不用都创建一个新的对象，而是可以选择复用对象，在一些情况就可以直接使用==判断相等，而不是equals</li>
+<li>可以返回原返回类型的任意子类型。可以参考java的集合框架。使用接口来引用被返回的对象，而不是通过实现类来返回对象引用是一个好习惯。</li>
+<li>在创建参数化类型实例的时候代码更简洁。例如通过类型推倒与泛型：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;K,V&gt; <span class="function">HashMap&lt;K,V&gt; <span class="title">newInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> HashMap&lt;K,V&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Map&lt;String,List&lt;String&gt;&gt; m = HashMap.newInstance();</span><br></pre></td></tr></table></figure>
+<p><strong>缺点</strong></p>
+<ol>
+<li>如果类不含有共有或者受保护的构造器，那么将不能被子类化。（可以通过组合化解）</li>
+<li>与其他的静态方法没有实质差别。一个好的命名这时候就很重要了，让人一看就知道是一个静态方法的作用。</li>
+</ol>
+<p><strong>静态工厂方法和构建器对于有多个可选参数的时候，将增加复杂度与降低可读性</strong></p>
+<h4 id="2-遇到多个构造器参数时考虑使用构建器"><a href="#2-遇到多个构造器参数时考虑使用构建器" class="headerlink" title="2. 遇到多个构造器参数时考虑使用构建器"></a>2. 遇到多个构造器参数时考虑使用构建器</h4><p>重叠构造器在少数参数的时候可以，可以方便按需选择构造器，但是参数很多的时候，很容易造成混乱，阅读型也会大大下降。有时候即使参数类型是对的，但是最终结果也可能时错误的。</p>
+<p>此外基于JavaBeans思想可以使用 setXXX，为每个参数设置setter方法，这样每个构造参数都能很容易理解其作用，但是一个很严重的缺点是：构造的过程被分配到了几个调用过程，容易造成不一致状态（尤其时多线程环境下），而要保证一致状态需要付出很多精力去维护。</p>
+<p>构建器一般是一个需要实例化的类的静态内部类，提供了对参数的默认设置，同时对外可以提供链式调用进行构造。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Car car = <span class="keyword">new</span> Car.Builder().name(<span class="string">"benz"</span>).wheels(<span class="number">4</span>).color(Color.BLACK).build();</span><br></pre></td></tr></table></figure>
+<p>而且在Builder的每个域中都可以进行约束判断，违反约束条件的情况可以跑出非法异常。Builder很好的结合了setter和重叠构造器的优点，参数数量可以更灵活，阅读性更好</p>
+<p>还可以考虑使用抽象工厂：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Builder</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">  <span class="function">T <span class="title">build</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>缺点</strong></p>
+<p>为了构造一个实例需要多生成一个实例（Builder类）。</p>
+<h4 id="3-使用私有构造器或者枚举类型强化单例（Singleton）"><a href="#3-使用私有构造器或者枚举类型强化单例（Singleton）" class="headerlink" title="3. 使用私有构造器或者枚举类型强化单例（Singleton）"></a>3. 使用私有构造器或者枚举类型强化单例（Singleton）</h4><ol>
+<li>一个类中之提供了一个私有的无参构造器，防止类外进行实例化。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CEO</span></span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> CEO INSTANCE  = <span class="keyword">new</span> CEO();</span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">CEO</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>但是，无参私有构造器可以通过反射的setAccessible()修改</strong></p>
+<p>解决这个问题则需要在无参构造器中加入判断，当进行第二个实例化的时候抛出异常。还以提供友好的getInstance()公共静态方法。</p>
+<p>如果该类实现了序列化，那么需要重写readResolve,防止反序列化时创建一个新的实例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> INSTANCE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过枚举实现Singleton，无偿提供序列化机制，绝对防止多次实例化，简洁的同时功能和公有域很相似。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> CEO&#123;</span><br><span class="line">  INSTANCE;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">speech</span><span class="params">()</span></span>&#123;....&#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span>&#123;....&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>工具类中加入私有无参构造器，防止实例化是个很好的习惯。</p>
+<h4 id="4-避免不必要的对象创建"><a href="#4-避免不必要的对象创建" class="headerlink" title="4. 避免不必要的对象创建"></a>4. 避免不必要的对象创建</h4><ol>
+<li>不要使用 new String(“text”);，这实际上创建了两个实例。</li>
+<li>能重用对象的时候尽量重用对象，但是需要避免重用对象造成的错误，得不偿失。</li>
+<li>避免不必要的额自动装箱工作，能用原生类型就用原生类型。</li>
+<li>慎重使用对象池，维护起来需要很多工作。</li>
+</ol>
+<h4 id="5-消除过期的对象的引用"><a href="#5-消除过期的对象的引用" class="headerlink" title="5. 消除过期的对象的引用"></a>5. 消除过期的对象的引用</h4><ol>
+<li>在一下设计的Stack出栈方法中：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">pop</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(size==<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackExcetiop();</span><br><span class="line">  <span class="keyword">return</span> elements[--size];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>经过多次push增长后，pop掉的元素依然在Stack中保持有过期引用并由Stack管理着，而这些过期引用后期不在被使用，却不能被垃圾回收器进行回收。导致内存泄露。可以做一下修改：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">pop</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(size==<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackExcetiop();</span><br><span class="line">  	Object o = elements[--size];</span><br><span class="line">  	element[size] = <span class="keyword">null</span>;</span><br><span class="line">  <span class="keyword">return</span> o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>设计自己管理内存的时候，都需要警惕内存泄露带来的问题</strong></p>
+<ol>
+<li>缓存带来内存泄露可能是缓存引用不在使用但是仍然长时间留在缓存中。</li>
+</ol>
+<ul>
+<li>当设计的缓存项的生命周期由该键的外部引用决定时可以使用WeakHashMap</li>
+<li>可以使用Timer或者ScheduleThreadPoolExecutor设计一个后台线程进行引用清理工作</li>
+<li>LinkedHashMap的removeEldsetEntry管理缓存，实现添加新缓存项的同时清除旧的缓存项</li>
+</ul>
+<ol>
+<li>回调与监听导致的内存泄露是因为，不使用的时候没有显示的取消注册，否则不断的注册回调或者监听会不断积累。可以只保存监听的弱引用。</li>
+</ol>
+<h4 id="6-避免使用终结方法"><a href="#6-避免使用终结方法" class="headerlink" title="6. 避免使用终结方法"></a>6. 避免使用终结方法</h4><ol>
+<li>避免尽量避免使用finalize（）终结方法，因为jvm不能保证何时执行，或者是否执行，执行需要多长时间。</li>
+<li>涉及资源释放的的时候，尽可能的使用显示终结方法，例如流操作中的close()方法，一般使用try..catch..finally，并在finally中调用close()操作。</li>
+<li>但是finalize方法可以作为最后的安全网操作，也就是在不显示终结的时候提供最后的终结调用，长时间释放资源总比不释放资源好。或者是用来释放非关键本地自愿的额时候使用。</li>
+</ol>
+<p><strong>子类覆盖了父类的finalize方法，那么需要显示调用父类的finalize，super.finalize();</strong></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Effect-Java/" rel="tag">#Effect Java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/26/n之中的所有m元素的逆字典序排列组合/" rel="next" title="n之中的所有m元素的逆字典序排列组合">
+                <i class="fa fa-chevron-left"></i> n之中的所有m元素的逆字典序排列组合
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/26/Effect-Java-Note-一/"
+           data-title="Effect Java Note(一)" data-url="dooogo.github.io/2016/11/26/Effect-Java-Note-一/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="dooze" />
+          <p class="site-author-name" itemprop="name">dooze</p>
+          <p class="site-description motion-element" itemprop="description">若无力驾驭，自由便是负担</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1853941987/home?wvr=5" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/donlan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/04c42edcd1bb/latest_articles" target="_blank" title="简书">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Effect-Java-Note-一"><span class="nav-number">1.</span> <span class="nav-text">Effect Java Note (一)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、对象的创建和销毁"><span class="nav-number">1.0.1.</span> <span class="nav-text">一、对象的创建和销毁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-考虑使用静态工厂方法替代构造器"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">1. 考虑使用静态工厂方法替代构造器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-遇到多个构造器参数时考虑使用构建器"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">2. 遇到多个构造器参数时考虑使用构建器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-使用私有构造器或者枚举类型强化单例（Singleton）"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">3. 使用私有构造器或者枚举类型强化单例（Singleton）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-避免不必要的对象创建"><span class="nav-number">1.0.1.4.</span> <span class="nav-text">4. 避免不必要的对象创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-消除过期的对象的引用"><span class="nav-number">1.0.1.5.</span> <span class="nav-text">5. 消除过期的对象的引用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-避免使用终结方法"><span class="nav-number">1.0.1.6.</span> <span class="nav-text">6. 避免使用终结方法</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dooze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"doogo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("Jifv9w6CrxO81MTWtmULGcio-gzGzoHsz", "kF9jN8faS2tHcoa3CHuual6x");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
