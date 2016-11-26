@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Java位操作," />
+  <meta name="keywords" content="排列组合," />
 
 
 
@@ -80,127 +80,34 @@
 
 
 
-<meta name="description" content="java中相关的位操作
-
-
-运算
-功能
-说明
-
-
-
-
-&amp;amp;
-按位与
-a&amp;amp;b a b对应位与
-
-
-
-
-按位或
-
-
-～
-位非
-~a a按位取反
-
-
-&amp;gt;&amp;gt;
-位右移
-a&amp;gt;&amp;gt;b a的二进制位向右移动b位，高位补零
-
-
-&amp;lt;&amp;lt;
-位左移
-a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
-
-
-&amp;gt;&amp;gt;&amp;gt;
-无符号位右移
-负数的时候，符号位不参与移">
+<meta name="description" content="问题描述题目原型大概如下：
+学校要评优秀学生，有十个平时都很优秀的学生，他们之间不相上下，但是评选的名额有限，假设学生人数是n(0&amp;lt;n&amp;lt;=10),评选的名额数时m(0&amp;lt;m&amp;lt;=n),那么希望随机从n名学生中选出m个学生，并且按字典序的列出所有可能的获得优秀的学生名额。n个学生的序号时从 1….n.
+示例输入：
+5   2
+输出：
+54535251434241323121
+思路">
 <meta property="og:type" content="article">
-<meta property="og:title" content="偶数二进制位反转(JAVA)">
-<meta property="og:url" content="dooogo.github.io/2016/10/03/偶数二进制位反转-JAVA/index.html">
+<meta property="og:title" content="n之中的所有m元素的逆字典序排列组合">
+<meta property="og:url" content="dooogo.github.io/2016/11/26/n之中的所有m元素的逆字典序排列组合/index.html">
 <meta property="og:site_name" content="Doo的主页">
-<meta property="og:description" content="java中相关的位操作
-
-
-运算
-功能
-说明
-
-
-
-
-&amp;amp;
-按位与
-a&amp;amp;b a b对应位与
-
-
-
-
-按位或
-
-
-～
-位非
-~a a按位取反
-
-
-&amp;gt;&amp;gt;
-位右移
-a&amp;gt;&amp;gt;b a的二进制位向右移动b位，高位补零
-
-
-&amp;lt;&amp;lt;
-位左移
-a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
-
-
-&amp;gt;&amp;gt;&amp;gt;
-无符号位右移
-负数的时候，符号位不参与移">
-<meta property="og:updated_time" content="2016-10-03T05:46:48.331Z">
+<meta property="og:description" content="问题描述题目原型大概如下：
+学校要评优秀学生，有十个平时都很优秀的学生，他们之间不相上下，但是评选的名额有限，假设学生人数是n(0&amp;lt;n&amp;lt;=10),评选的名额数时m(0&amp;lt;m&amp;lt;=n),那么希望随机从n名学生中选出m个学生，并且按字典序的列出所有可能的获得优秀的学生名额。n个学生的序号时从 1….n.
+示例输入：
+5   2
+输出：
+54535251434241323121
+思路">
+<meta property="og:updated_time" content="2016-11-26T11:35:03.475Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="偶数二进制位反转(JAVA)">
-<meta name="twitter:description" content="java中相关的位操作
-
-
-运算
-功能
-说明
-
-
-
-
-&amp;amp;
-按位与
-a&amp;amp;b a b对应位与
-
-
-
-
-按位或
-
-
-～
-位非
-~a a按位取反
-
-
-&amp;gt;&amp;gt;
-位右移
-a&amp;gt;&amp;gt;b a的二进制位向右移动b位，高位补零
-
-
-&amp;lt;&amp;lt;
-位左移
-a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
-
-
-&amp;gt;&amp;gt;&amp;gt;
-无符号位右移
-负数的时候，符号位不参与移">
+<meta name="twitter:title" content="n之中的所有m元素的逆字典序排列组合">
+<meta name="twitter:description" content="问题描述题目原型大概如下：
+学校要评优秀学生，有十个平时都很优秀的学生，他们之间不相上下，但是评选的名额有限，假设学生人数是n(0&amp;lt;n&amp;lt;=10),评选的名额数时m(0&amp;lt;m&amp;lt;=n),那么希望随机从n名学生中选出m个学生，并且按字典序的列出所有可能的获得优秀的学生名额。n个学生的序号时从 1….n.
+示例输入：
+5   2
+输出：
+54535251434241323121
+思路">
 
 
 
@@ -218,7 +125,7 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
   };
 </script>
 
-  <title> 偶数二进制位反转(JAVA) | Doo的主页 </title>
+  <title> n之中的所有m元素的逆字典序排列组合 | Doo的主页 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -378,7 +285,7 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
             
             
               
-                偶数二进制位反转(JAVA)
+                n之中的所有m元素的逆字典序排列组合
               
             
           </h1>
@@ -390,8 +297,8 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-03T13:45:32+08:00" content="2016-10-03">
-              2016-10-03
+            <time itemprop="dateCreated" datetime="2016-11-26T19:32:01+08:00" content="2016-11-26">
+              2016-11-26
             </time>
           </span>
 
@@ -404,8 +311,8 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/JAVA/" itemprop="url" rel="index">
-                    <span itemprop="name">JAVA</span>
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
                   </a>
                 </span>
 
@@ -420,8 +327,8 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/10/03/偶数二进制位反转-JAVA/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/03/偶数二进制位反转-JAVA/" itemprop="commentsCount"></span>
+                <a href="/2016/11/26/n之中的所有m元素的逆字典序排列组合/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/26/n之中的所有m元素的逆字典序排列组合/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -449,71 +356,35 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
       
 
       
-        <h3 id="java中相关的位操作"><a href="#java中相关的位操作" class="headerlink" title="java中相关的位操作"></a>java中相关的位操作</h3><table>
-<thead>
-<tr>
-<th>运算</th>
-<th>功能</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>&amp;</td>
-<td>按位与</td>
-<td>a&amp;b a b对应位与</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>按位或</td>
-</tr>
-<tr>
-<td>～</td>
-<td>位非</td>
-<td>~a a按位取反</td>
-</tr>
-<tr>
-<td>&gt;&gt;</td>
-<td>位右移</td>
-<td>a&gt;&gt;b a的二进制位向右移动b位，高位补零</td>
-</tr>
-<tr>
-<td>&lt;&lt;</td>
-<td>位左移</td>
-<td>a&lt;&lt;b a的二进制位向左移动b位，低位补零</td>
-</tr>
-<tr>
-<td>&gt;&gt;&gt;</td>
-<td>无符号位右移</td>
-<td>负数的时候，符号位不参与移位，</td>
-</tr>
-<tr>
-<td>^</td>
-<td>位异或</td>
-<td>a^b a与b按位异或</td>
-</tr>
-</tbody>
-</table>
-<h3 id="二进制位反转思路"><a href="#二进制位反转思路" class="headerlink" title="二进制位反转思路"></a>二进制位反转思路</h3><p><em>以下二进制位用8位做演示</em></p>
-<p>a = 0000 0110  ; 十进制： 6</p>
-<p>反转二进制位后</p>
-<p>a = 0000 0011  ; 十进制： 3</p>
-<p>只保留一个数的最低位，其余位变为0：<br>n = 0000 1101;<br>n &amp; 1 = 0000 0001;</p>
-<p>假设a = 0000 0110,b=0(用来保存结果) <br><br>a每次右移一位，然后最低位与b的最低位 进行位或，然后b左移一位， 直到a == 0为止，这样 b中则是a的反转二进制位的。</p>
-<h4 id="过程演示"><a href="#过程演示" class="headerlink" title="过程演示"></a>过程演示</h4><ol>
-<li>a = 0000 011<em>0</em><br>b = 0000 000<em>0</em></li>
-<li>a = 0000 001<em>1</em><br><br>  b = 0000 000<em>1</em></li>
-<li>a = 0000 000<em>1</em><br><br>  b = 0000 001<em>1</em></li>
-<li>a = 0000 000<em>0</em> 停止，此时b就是a反转后的结果</li>
-</ol>
-<h3 id="java实现代码"><a href="#java实现代码" class="headerlink" title="java实现代码"></a>java实现代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">reverseNum</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> r = <span class="number">0</span> ;<span class="comment">//反转的结果</span></span><br><span class="line">  <span class="keyword">while</span>(n!=<span class="number">0</span>)&#123; <span class="comment">// 直到a==0，不然一直进行移位</span></span><br><span class="line">    <span class="comment">//或运算将n的最低位保存到r中，同时r左移一位，</span></span><br><span class="line">    <span class="comment">//保证上次的移位结果向左移动，新的需要保存的移位结果一直在r的最低位中</span></span><br><span class="line">    r  = (r&lt;&lt;<span class="number">1</span>) | (n &amp; <span class="number">1</span>);</span><br><span class="line">    n  = n&gt;&gt;<span class="number">1</span>; <span class="comment">// n右移一位</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> r;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="java-实例"><a href="#java-实例" class="headerlink" title="java 实例"></a>java 实例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EvenNumReverse</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reverse</span><span class="params">()</span></span>&#123;</span><br><span class="line">		Scanner in = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		<span class="keyword">int</span> count = <span class="number">0</span>;<span class="comment">//输入的数的个数</span></span><br><span class="line">		<span class="keyword">int</span>[] seq;<span class="comment">//保存输入结果</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">//需要输入的数的个数不为零情况下，一直输入</span></span><br><span class="line">		<span class="keyword">while</span>((count = in.nextInt())!=<span class="number">0</span>)&#123;</span><br><span class="line">			seq = <span class="keyword">new</span> <span class="keyword">int</span>[count];</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;count;i++)&#123;</span><br><span class="line">				<span class="keyword">int</span> n = in.nextInt();</span><br><span class="line">				<span class="keyword">if</span>(n%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">					n = reverseNum(n);</span><br><span class="line">				seq[i] = n;</span><br><span class="line">			&#125;</span><br><span class="line">			print(seq);</span><br><span class="line">		&#125;</span><br><span class="line">		in.close();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//将一个数的二进制位反转</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">reverseNum</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> r = <span class="number">0</span> ;</span><br><span class="line">		<span class="keyword">while</span>(n!=<span class="number">0</span>)&#123;</span><br><span class="line">			r  = (r&lt;&lt;<span class="number">1</span>) | (n &amp; <span class="number">1</span>);</span><br><span class="line">			n  = n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> r;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/*</span><br><span class="line">	 * 打印数组</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">int</span>[] res)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(res!=<span class="keyword">null</span>)</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;res.length;i++)&#123;</span><br><span class="line">				System.out.print(res[i]+<span class="string">"\t"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		EvenNumReverse o = <span class="keyword">new</span> EvenNumReverse();</span><br><span class="line">		o.reverse();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>输入输出结果</p>
-<p>3<br><br>1 6 5<br><br><em>1    3    5</em>    <br><br><br>3<br><br>2 4 6<br><br><em>1    1    3</em><br></p>
-</li>
-</ul>
+        <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>题目原型大概如下：</p>
+<p>学校要评优秀学生，有十个平时都很优秀的学生，他们之间不相上下，但是评选的名额有限，假设学生人数是n(0&lt;n&lt;=10),评选的名额数时m(0&lt;m&lt;=n),那么希望随机从n名学生中选出m个学生，并且按字典序的列出所有可能的获得优秀的学生名额。n个学生的序号时从 1….n.</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>输入：</p>
+<p>5   2</p>
+<p>输出：</p>
+<p>54<br>53<br>52<br>51<br>43<br>42<br>41<br>32<br>31<br>21</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>假设n个学生的序号是[1,2,…,n]，从中选m个学生，我们生成一个长度为m的数组，记录选学生的序号索引，例如n=5,m=2,那么index=[0,1]是一开始的选择学生的索引，index=[n-m,n-m+1]=[3,4]是最后一种情况，这里说明一下如何通过index数组求出编号，因为开始我们是从最小索引开始，那么用n-index[i] (0&lt;=i&lt;m)就是对应的学生编号，而且恰好能按照字典序由大到小的计算得到学生序号。</p>
+<p>关键是在于index数组从开始态到啊结束态的不断变化，其实细心点可以发现，我们每移动一次（相当于+1）index末尾元素就可以得到一种选择的情况，而当最后一个元素加一后，其值超过它自己对应的最右位置时，我们就需要从最右开始找到与最右元素连续的索引位置，让这部分元素的索引从左边未移动过的最右那个元素的下一个位置开始标记自己的索引，而那个左边未移动过的最右那个元素的索引也开始移动一位，以此往复，知道所有元素的索引位置都到达了自己能到达的最终位置，结束。</p>
+<p>示例：</p>
+<p>假设 n = 6,m=3;end=[3,4,5]对应m=3个学生移动的最终索引位置，index=[0,1,2];这是最开始的m=3个学生的索引位置。</p>
+<p><strong>start:</strong></p>
+<p>index : 0,1,2</p>
+<p>stuno: 1,2,3,4,5,6</p>
+<p><strong>index末尾元素到达自己所能到达的最后位置（+1后超出）</strong></p>
+<p>index : 0,1,          5     </p>
+<p>stuno: 1,2,3,4,5,6</p>
+<p><strong>下一步的索引变化</strong></p>
+<p>index : 0,   2,3</p>
+<p>stuno: 1,2,3,4,5,6</p>
+<p><strong>再比如</strong></p>
+<p>index : 0,         4,5</p>
+<p>stuno: 1,2,3,4,5,6</p>
+<p><strong>下一步将是</strong></p>
+<p>index :    1,2,3</p>
+<p>stuno: 1,2,3,4,5,6</p>
+<p><strong>最后将是</strong></p>
+<p>index :           3,4,5</p>
+<p>stuno: 1,2,3,4,5,6</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注意end index中保存的索引时相对于n来说的范围时[0,1,...,n-2,n-1]</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> getAllCase(<span class="keyword">int</span> n,<span class="keyword">int</span> m)&#123;</span><br><span class="line">  <span class="keyword">if</span>(n&lt;=<span class="number">0</span> || m&lt;=<span class="number">0</span> || m&gt;n)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  <span class="keyword">int</span> end[] = <span class="keyword">new</span> <span class="keyword">int</span>[m];  <span class="comment">//选中的m学生对应的末尾索引</span></span><br><span class="line">  <span class="keyword">int</span> <span class="keyword">index</span>[] = <span class="keyword">new</span> <span class="keyword">int</span>[m];<span class="comment">//当前选中的m个学生的索引值</span></span><br><span class="line">  <span class="comment">//初始化end  和 index</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">    end[i] = n - m + i;<span class="comment">//计算第i个选中的学生能到达的末尾索引</span></span><br><span class="line">    <span class="keyword">index</span>[i] = i; </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">int</span> l = m - <span class="number">1</span>;<span class="comment">//第m个学生（最后一个学生）对应于m的索引</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    print(<span class="keyword">index</span>, n, m);</span><br><span class="line">    <span class="keyword">index</span>[l]++; <span class="comment">//每次都是第m个学生的索引值加一（最后一个）</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">index</span>[l] &gt; end[l]) &#123; <span class="comment">//超过他自己本来只能到达的最大索引，说明需要进行下一轮</span></span><br><span class="line">      <span class="keyword">int</span> t = l;</span><br><span class="line">      <span class="comment">//找到l位置之前已经达到末尾位置的第一个没有到达对应末尾位置的的下标</span></span><br><span class="line">      <span class="keyword">while</span> (t &gt;= <span class="number">0</span> &amp;&amp; <span class="keyword">index</span>[t] &gt;= end[t]) &#123;</span><br><span class="line">        t--;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//如果t大于等0说明上面while循环要找到的位置时存在的</span></span><br><span class="line">      <span class="keyword">if</span> (t &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> s = <span class="keyword">index</span>[t];<span class="comment">//上一步找到的第一个没有到达对应末尾位置的元素（从右往左）对应于n的索引值。</span></span><br><span class="line">        <span class="comment">//从t到m-1除的元素索引加一（相当于后移一位，依次排列在t之后，注意：第一次的t位置就已经开始加一）</span></span><br><span class="line">        <span class="keyword">while</span> (t &lt; m) &#123;</span><br><span class="line">          <span class="keyword">index</span>[t++] = ++s;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;<span class="comment">//否则说明说明位置都已经到达末尾，既是所有情况都已经遍历了一次</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//根据当前的索引数组答应选中的学生序号，因为索引数组时从0开始的，那么n-index[i]恰好得到对应的序号</span></span><br><span class="line"><span class="keyword">private</span>  <span class="keyword">void</span> print(<span class="keyword">int</span> <span class="keyword">index</span>[], <span class="keyword">int</span> n, <span class="keyword">int</span> m) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">    System.out.print(n - <span class="keyword">index</span>[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -534,7 +405,7 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
       
         <div class="post-tags">
           
-            <a href="/tags/Java位操作/" rel="tag">#Java位操作</a>
+            <a href="/tags/排列组合/" rel="tag">#排列组合</a>
           
         </div>
       
@@ -543,17 +414,13 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/10/03/LinkedList-源码分析/" rel="next" title="LinkedList 源码分析">
-                <i class="fa fa-chevron-left"></i> LinkedList 源码分析
+              <a href="/2016/10/25/Android-性能优化总结/" rel="next" title="Android 性能优化总结">
+                <i class="fa fa-chevron-left"></i> Android 性能优化总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/13/再温排序/" rel="prev" title="再温排序">
-                再温排序 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -579,8 +446,8 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/10/03/偶数二进制位反转-JAVA/"
-           data-title="偶数二进制位反转(JAVA)" data-url="dooogo.github.io/2016/10/03/偶数二进制位反转-JAVA/">
+      <div class="ds-thread" data-thread-key="2016/11/26/n之中的所有m元素的逆字典序排列组合/"
+           data-title="n之中的所有m元素的逆字典序排列组合" data-url="dooogo.github.io/2016/11/26/n之中的所有m元素的逆字典序排列组合/">
       </div>
     
   </div>
@@ -700,7 +567,7 @@ a&amp;lt;&amp;lt;b a的二进制位向左移动b位，低位补零
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#java中相关的位操作"><span class="nav-number">1.</span> <span class="nav-text">java中相关的位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二进制位反转思路"><span class="nav-number">2.</span> <span class="nav-text">二进制位反转思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#过程演示"><span class="nav-number">2.1.</span> <span class="nav-text">过程演示</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java实现代码"><span class="nav-number">3.</span> <span class="nav-text">java实现代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java-实例"><span class="nav-number">4.</span> <span class="nav-text">java 实例</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例"><span class="nav-number">2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思路"><span class="nav-number">3.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">4.</span> <span class="nav-text">代码</span></a></li></ol></div>
             
           </div>
         </section>
