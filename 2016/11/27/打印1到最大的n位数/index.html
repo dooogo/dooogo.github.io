@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="牛客实习笔试," />
+  <meta name="keywords" content="字符运算," />
 
 
 
@@ -80,34 +80,19 @@
 
 
 
-<meta name="description" content="这是牛客网举办的实习编程赛的第一季，去打打了酱油，哈哈，感觉打酱油的份都算不上，算是充数的水货吧
-关于这个记忆录仅是我个人根据大脑中尚有的一些影响进行问题的描述的，难免会有错漏之处。请各位看客勿要过于纠结问题的描述。如能更好的建议或者思路，甚是欢迎一起讨论。说明：本人没有学过什么算法，仅是凭自己的理解解题，疏忽，错漏，不当，可能难免参差其中，望各位看官不要见怪。
-
-
-第一题
-
-这是一个关于字符串的">
+<meta name="description" content="题目输入一个整数n（0&amp;lt;n）,按顺序打印从1到最大的n位十进制数。例如输入4，则打印出1,2,3,4，…，9998,9999.
+分析该题目的首要限制点时n可以很大，如果n&amp;gt;=32，那么坑定超过了int的表示范围，即使是long类型的也无法避免这个问题。那么我们是否可以用字符串呢？我想那是肯定的。而字符串我们可以转换成字符数组，这样更方便操作。而实际操作我们需要注意的是每次都是从最后一个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="牛客实习季1st笔试回忆录">
-<meta property="og:url" content="dooogo.github.io/2016/04/19/牛客实习季1st笔试回忆录/index.html">
+<meta property="og:title" content="打印1到最大的n位数">
+<meta property="og:url" content="dooogo.github.io/2016/11/27/打印1到最大的n位数/index.html">
 <meta property="og:site_name" content="少晒太阳,如鱼得水">
-<meta property="og:description" content="这是牛客网举办的实习编程赛的第一季，去打打了酱油，哈哈，感觉打酱油的份都算不上，算是充数的水货吧
-关于这个记忆录仅是我个人根据大脑中尚有的一些影响进行问题的描述的，难免会有错漏之处。请各位看客勿要过于纠结问题的描述。如能更好的建议或者思路，甚是欢迎一起讨论。说明：本人没有学过什么算法，仅是凭自己的理解解题，疏忽，错漏，不当，可能难免参差其中，望各位看官不要见怪。
-
-
-第一题
-
-这是一个关于字符串的">
-<meta property="og:updated_time" content="2016-10-01T11:52:54.851Z">
+<meta property="og:description" content="题目输入一个整数n（0&amp;lt;n）,按顺序打印从1到最大的n位十进制数。例如输入4，则打印出1,2,3,4，…，9998,9999.
+分析该题目的首要限制点时n可以很大，如果n&amp;gt;=32，那么坑定超过了int的表示范围，即使是long类型的也无法避免这个问题。那么我们是否可以用字符串呢？我想那是肯定的。而字符串我们可以转换成字符数组，这样更方便操作。而实际操作我们需要注意的是每次都是从最后一个">
+<meta property="og:updated_time" content="2016-11-27T08:10:45.044Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="牛客实习季1st笔试回忆录">
-<meta name="twitter:description" content="这是牛客网举办的实习编程赛的第一季，去打打了酱油，哈哈，感觉打酱油的份都算不上，算是充数的水货吧
-关于这个记忆录仅是我个人根据大脑中尚有的一些影响进行问题的描述的，难免会有错漏之处。请各位看客勿要过于纠结问题的描述。如能更好的建议或者思路，甚是欢迎一起讨论。说明：本人没有学过什么算法，仅是凭自己的理解解题，疏忽，错漏，不当，可能难免参差其中，望各位看官不要见怪。
-
-
-第一题
-
-这是一个关于字符串的">
+<meta name="twitter:title" content="打印1到最大的n位数">
+<meta name="twitter:description" content="题目输入一个整数n（0&amp;lt;n）,按顺序打印从1到最大的n位十进制数。例如输入4，则打印出1,2,3,4，…，9998,9999.
+分析该题目的首要限制点时n可以很大，如果n&amp;gt;=32，那么坑定超过了int的表示范围，即使是long类型的也无法避免这个问题。那么我们是否可以用字符串呢？我想那是肯定的。而字符串我们可以转换成字符数组，这样更方便操作。而实际操作我们需要注意的是每次都是从最后一个">
 
 
 
@@ -125,7 +110,7 @@
   };
 </script>
 
-  <title> 牛客实习季1st笔试回忆录 | 少晒太阳,如鱼得水 </title>
+  <title> 打印1到最大的n位数 | 少晒太阳,如鱼得水 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -291,7 +276,7 @@
             
             
               
-                牛客实习季1st笔试回忆录
+                打印1到最大的n位数
               
             
           </h1>
@@ -303,19 +288,38 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-19T15:33:09+08:00" content="2016-04-19">
-              2016-04-19
+            <time itemprop="dateCreated" datetime="2016-11-27T15:35:45+08:00" content="2016-11-27">
+              2016-11-27
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/19/牛客实习季1st笔试回忆录/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/19/牛客实习季1st笔试回忆录/" itemprop="commentsCount"></span>
+                <a href="/2016/11/27/打印1到最大的n位数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/27/打印1到最大的n位数/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -325,7 +329,7 @@
 
           
           
-             <span id="/2016/04/19/牛客实习季1st笔试回忆录/" class="leancloud_visitors" data-flag-title="牛客实习季1st笔试回忆录">
+             <span id="/2016/11/27/打印1到最大的n位数/" class="leancloud_visitors" data-flag-title="打印1到最大的n位数">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -352,38 +356,9 @@
       
 
       
-        <h3 id="这是牛客网举办的实习编程赛的第一季，去打打了酱油，哈哈，感觉打酱油的份都算不上，算是充数的水货吧"><a href="#这是牛客网举办的实习编程赛的第一季，去打打了酱油，哈哈，感觉打酱油的份都算不上，算是充数的水货吧" class="headerlink" title="这是牛客网举办的实习编程赛的第一季，去打打了酱油，哈哈，感觉打酱油的份都算不上，算是充数的水货吧"></a>这是牛客网举办的实习编程赛的第一季，去打打了酱油，哈哈，感觉打酱油的份都算不上，算是充数的水货吧</h3><ul>
-<li>关于这个记忆录仅是我个人根据大脑中尚有的一些影响进行问题的描述的，难免会有错漏之处。请各位看客勿要过于纠结问题的描述。如能更好的建议或者思路，甚是欢迎一起讨论。<h2 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h2>本人没有学过什么算法，仅是凭自己的理解解题，疏忽，错漏，不当，可能难免参差其中，望各位看官不要见怪。</li>
-</ul>
-<blockquote>
-<p>第一题</p>
-</blockquote>
-<p>这是一个关于字符串的题目，题目的要求是将一个给定的字符串，将空格两边的单词对调，并且要求将每个单词的大小写兑换，既是大写变成小写，小写变成大写。例如：Hello World 将转换成 hELLO wORLD。</p>
-<blockquote>
-<p>输入样例：This is a sample,14 </p>
-<p>输出样例：SAMPLE A IS tHIS</p>
-</blockquote>
-<ul>
-<li><p>给定的函数（我用的JAVA）</p>
-<p>  public String trans(String s, int n)<br>  {</p>
-<pre><code>//write your code here
-</code></pre><p>  ｝</p>
-</li>
-</ul>
-<blockquote>
-<p>看到这样的样例输入输出，我就理解题目的意思为：将一个字符串中已空格分隔的单词大小写转换后，逆序输出。然后我就按住这个想法做了，但是提交代码的时候，答案是错的。我就开始猜想是不是我理解错误？到现在我也?&gt;没有想清楚。感觉自己很笨。</p>
-</blockquote>
-<ul>
-<li>上JAVA代码<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Transform</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	System.out.println(<span class="keyword">new</span> Transform().trans(<span class="string">"This is a sample"</span>, <span class="number">14</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span><br><span class="line"> * @param s 需要转换的字符串</span><br><span class="line"> * </span><br><span class="line"> * @param n 需要转换的字符串的长度</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">trans</span><span class="params">(String s, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 已空格分割字符串</span></span><br><span class="line">	String a[] = s.split(<span class="string">" "</span>);</span><br><span class="line">	StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="keyword">int</span> l = a.length - <span class="number">1</span>;</span><br><span class="line">	<span class="comment">// 将分割字符串得到的数组逆序</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; a.length / <span class="number">2</span>; i++) &#123;</span><br><span class="line">		String temp = a[i];</span><br><span class="line">		a[i] = a[l];</span><br><span class="line">		a[l] = temp;</span><br><span class="line">		l--;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/*</span><br><span class="line">	 * 此处两层循环：第一层循环是分割得到的数组长度，即单词数量 第二层循环是每个单词的长度</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; a.length; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; a[i].length(); j++) &#123;</span><br><span class="line">			<span class="keyword">int</span> c = a[i].charAt(j);<span class="comment">// 获取字符的ACSII</span></span><br><span class="line">			<span class="comment">// 小写转换成大写</span></span><br><span class="line">			<span class="keyword">if</span> (c &gt;= <span class="number">97</span> &amp;&amp; c &lt;= <span class="number">122</span>)</span><br><span class="line">				sb.append((<span class="keyword">char</span>) (c - <span class="number">32</span>));</span><br><span class="line">			<span class="comment">// 大写转换成小写</span></span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (c &gt;= <span class="number">65</span> &amp;&amp; c &lt;= <span class="number">90</span>)</span><br><span class="line">				sb.append((<span class="keyword">char</span>) (c + <span class="number">32</span>));</span><br><span class="line">			<span class="comment">// 不是字母不转换</span></span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				sb.append((<span class="keyword">char</span>) c);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 将分割掉的空格加回来</span></span><br><span class="line">           <span class="keyword">if</span> (i != a.length - <span class="number">1</span>)</span><br><span class="line">		    sb.append(<span class="string">" "</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sb.toString();</span><br><span class="line">&#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>上述代码测试输出结果：SAMPLE A IS tHIS </p>
-</blockquote>
-<ul>
-<li>如果按我上述的代码的话感觉第二各参数完全用不到，老有一种自己理解错的感觉</li>
-</ul>
-
+        <h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>输入一个整数n（0&lt;n）,按顺序打印从1到最大的n位十进制数。例如输入4，则打印出1,2,3,4，…，9998,9999.</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>该题目的首要限制点时n可以很大，如果n&gt;=32，那么坑定超过了int的表示范围，即使是long类型的也无法避免这个问题。那么我们是否可以用字符串呢？我想那是肯定的。而字符串我们可以转换成字符数组，这样更方便操作。而实际操作我们需要注意的是每次都是从最后一个字符开始（因为对应的是个位），进行“加一”操作，产生进位的时候向前一位“加一”，直到没有了进位，或则第0个字符处产生了进位，那么说明已经到最大的那个n位数，打印结束。而每次“加一”后我们进行一次打印操作，需要注意的是，假设此时的字符串时000123，那么我们打印的其实是123，所以我们是从第一个不是‘0’的地方开始输出结果的。</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> printN(<span class="keyword">int</span> n) &#123;</span><br><span class="line">        <span class="keyword">char</span> num[] = <span class="keyword">new</span> <span class="keyword">char</span>[n];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) <span class="comment">//初始化字符串</span></span><br><span class="line">            num[i] = <span class="string">'0'</span>;</span><br><span class="line">        num[n - <span class="number">1</span>] = <span class="string">'1'</span>;</span><br><span class="line">        <span class="keyword">boolean</span> isEnd = <span class="keyword">false</span>;<span class="comment">//是否已经是最大的n位数</span></span><br><span class="line">        <span class="keyword">while</span> (!isEnd) &#123;</span><br><span class="line">            printNum(num);</span><br><span class="line">            isEnd = inc(num);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//加一操作</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> inc(<span class="keyword">char</span>[] num) &#123;</span><br><span class="line">        <span class="keyword">boolean</span> isUp = <span class="keyword">false</span>; <span class="comment">//是否产生了进位</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = num.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">int</span> <span class="keyword">sum</span>;</span><br><span class="line">            <span class="keyword">if</span> (i == num.length - <span class="number">1</span>) &#123;  <span class="comment">//个位“加一”</span></span><br><span class="line">                <span class="keyword">sum</span> = num[i] - <span class="string">'0'</span> + <span class="number">1</span>; </span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">//个位“加一”后产生进位，则继续向前加一</span></span><br><span class="line">                <span class="keyword">sum</span> = num[i] - <span class="string">'0'</span> + (isUp ? <span class="number">1</span> : <span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">sum</span> == <span class="number">10</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (i == <span class="number">0</span>)  <span class="comment">//第0位产生进位，已经时最大的n位数，返回true结束循环</span></span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                isUp = <span class="keyword">true</span>;</span><br><span class="line">                num[i] = <span class="string">'0'</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">//“没有进位了直接返回”</span></span><br><span class="line">                num[i] = (<span class="keyword">char</span>) (<span class="keyword">sum</span> + <span class="string">'0'</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//打印</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> printNum(<span class="keyword">char</span> num[]) &#123;</span><br><span class="line">        <span class="keyword">boolean</span> isNum = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> aNum : num) &#123;</span><br><span class="line">            <span class="keyword">if</span> (aNum != <span class="string">'0'</span> &amp;&amp; !isNum) &#123; <span class="comment">//遇到第一个非‘0’字符，开始打印其（包括本身）之后的字符</span></span><br><span class="line">                isNum = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (isNum) &#123;</span><br><span class="line">                System.out.print(aNum);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -403,7 +378,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/牛客实习笔试/" rel="tag">#牛客实习笔试</a>
+            <a href="/tags/字符运算/" rel="tag">#字符运算</a>
           
         </div>
       
@@ -412,17 +387,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/16/仅以此纪念我挫的不得了的算法/" rel="next" title="仅以此纪念我挫的不得了的算法">
-                <i class="fa fa-chevron-left"></i> 仅以此纪念我挫的不得了的算法
+              <a href="/2016/11/26/Effect-Java-Note-一/" rel="next" title="Effect Java Note(一)">
+                <i class="fa fa-chevron-left"></i> Effect Java Note(一)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/04/28/今日头条实习牛客网笔试题2/" rel="prev" title="今日头条实习牛客网笔试题2">
-                今日头条实习牛客网笔试题2 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -448,8 +419,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/04/19/牛客实习季1st笔试回忆录/"
-           data-title="牛客实习季1st笔试回忆录" data-url="dooogo.github.io/2016/04/19/牛客实习季1st笔试回忆录/">
+      <div class="ds-thread" data-thread-key="2016/11/27/打印1到最大的n位数/"
+           data-title="打印1到最大的n位数" data-url="dooogo.github.io/2016/11/27/打印1到最大的n位数/">
       </div>
     
   </div>
@@ -569,7 +540,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#这是牛客网举办的实习编程赛的第一季，去打打了酱油，哈哈，感觉打酱油的份都算不上，算是充数的水货吧"><span class="nav-number">1.</span> <span class="nav-text">这是牛客网举办的实习编程赛的第一季，去打打了酱油，哈哈，感觉打酱油的份都算不上，算是充数的水货吧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说明："><span class="nav-number"></span> <span class="nav-text">说明：</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li></ol></div>
             
           </div>
         </section>
