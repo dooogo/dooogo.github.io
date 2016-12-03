@@ -1699,14 +1699,14 @@ this.swap(int a[],int a,int b);
     </entry>
     
     <entry>
-      <title><![CDATA[tags]]></title>
-      <url>dooogo.github.io/tags/index.html</url>
+      <title></title>
+      <url>dooogo.github.io/links/index.html</url>
       <content type="html"></content>
     </entry>
     
     <entry>
-      <title></title>
-      <url>dooogo.github.io/links/index.html</url>
+      <title><![CDATA[tags]]></title>
+      <url>dooogo.github.io/tags/index.html</url>
       <content type="html"></content>
     </entry>
     
