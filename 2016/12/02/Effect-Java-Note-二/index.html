@@ -1,0 +1,1125 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato,Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Effect Java," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="少晒太阳,如鱼得水" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="对于所有对象都通用的方法1. 覆盖equals时的通用约定equals所期望的结果
+
+类的每个实例本质上都是唯一的。
+不关心类是否提供了“逻辑相等”的测试功能。
+超类已经覆盖了equals，从超类继承过来的行为对于子类也是合适的。
+类时私有的或者包私有的，可以确定它的equals方法永远不会调用。
+
+需要覆盖的时机：
+父类没有实现所期望的以上的equals实现
+
+“最多只存在一个对象”的类不需要覆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effect Java Note(二)">
+<meta property="og:url" content="dooogo.github.io/2016/12/02/Effect-Java-Note-二/index.html">
+<meta property="og:site_name" content="少晒太阳,如鱼得水">
+<meta property="og:description" content="对于所有对象都通用的方法1. 覆盖equals时的通用约定equals所期望的结果
+
+类的每个实例本质上都是唯一的。
+不关心类是否提供了“逻辑相等”的测试功能。
+超类已经覆盖了equals，从超类继承过来的行为对于子类也是合适的。
+类时私有的或者包私有的，可以确定它的equals方法永远不会调用。
+
+需要覆盖的时机：
+父类没有实现所期望的以上的equals实现
+
+“最多只存在一个对象”的类不需要覆">
+<meta property="og:updated_time" content="2016-12-03T05:46:03.066Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Effect Java Note(二)">
+<meta name="twitter:description" content="对于所有对象都通用的方法1. 覆盖equals时的通用约定equals所期望的结果
+
+类的每个实例本质上都是唯一的。
+不关心类是否提供了“逻辑相等”的测试功能。
+超类已经覆盖了equals，从超类继承过来的行为对于子类也是合适的。
+类时私有的或者包私有的，可以确定它的equals方法永远不会调用。
+
+需要覆盖的时机：
+父类没有实现所期望的以上的equals实现
+
+“最多只存在一个对象”的类不需要覆">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Effect Java Note(二) | 少晒太阳,如鱼得水 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a393584c41c219603e4e068220d7084f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1260880910&web_id=1260880910" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">少晒太阳,如鱼得水</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">春风十里，有你</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Effect Java Note(二)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-02T13:03:20+08:00" content="2016-12-02">
+              2016-12-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/02/Effect-Java-Note-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/Effect-Java-Note-二/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/12/02/Effect-Java-Note-二/" class="leancloud_visitors" data-flag-title="Effect Java Note(二)">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="对于所有对象都通用的方法"><a href="#对于所有对象都通用的方法" class="headerlink" title="对于所有对象都通用的方法"></a>对于所有对象都通用的方法</h1><h3 id="1-覆盖equals时的通用约定"><a href="#1-覆盖equals时的通用约定" class="headerlink" title="1. 覆盖equals时的通用约定"></a>1. 覆盖equals时的通用约定</h3><p><strong>equals所期望的结果</strong></p>
+<ul>
+<li>类的每个实例本质上都是唯一的。</li>
+<li>不关心类是否提供了“逻辑相等”的测试功能。</li>
+<li>超类已经覆盖了equals，从超类继承过来的行为对于子类也是合适的。</li>
+<li>类时私有的或者包私有的，可以确定它的equals方法永远不会调用。</li>
+</ul>
+<p><strong>需要覆盖的时机：</strong></p>
+<p>父类没有实现所期望的以上的equals实现</p>
+<blockquote>
+<p>“最多只存在一个对象”的类不需要覆盖equals,例如枚举类型</p>
+</blockquote>
+<p><strong>equals的等价关系</strong></p>
+<ul>
+<li><p>自反性。任何非null引用值，x.equals(x)返回true。</p>
+<p>Set集合中重复添加同意一个引用值会怎样？</p>
+</li>
+<li><p>对称性。对于任何非null的x和y,x.equals(y) 返回true，那么y.equals(x) 也返回true。</p>
+<p>自定义类A实现了不区分大小写的比较,new A(“Aa”).equals(“aa”)返回true，但是“aa”.equals(new A(“Aa”))的返回值却由String类中的equals方法决定。</p>
+</li>
+<li><p>传递性。对于任何非null的x,y,z，如果x.equals(y) 为true，且 y.equals(z) 也为true，那么x.equals(z) 也为true。</p>
+<p>存在扩展可实例化与增加主键值的时候，容易违反传递性。考虑使用抽象类并在其子类中添加属性，例如Shape。</p>
+</li>
+<li><p>一致性。对于任何非null引用值x,y，只要x.equals(y)返回true，那么在引用对象信息没有被修改，那么每次返回的仍是一致的true。</p>
+<p>要保证一致性，不要使equals依赖于不可靠的的资源。例如java..net.URL的equals依赖于主机的IP,IP可能随着时间的推移而改变。</p>
+</li>
+<li><p>对于任何非null引用值x,x.equals(null)必须返回false。</p>
+</li>
+</ul>
+<p><strong>高质量equals</strong></p>
+<ol>
+<li>使用==检查是待比较参数是否是同意对象引用本身</li>
+<li>使用instanceof检查参数是否是正确类型</li>
+<li>把参数转换成正确的类型，使用instanceof判断</li>
+<li>检查参数中域与该对象中的对应域相匹配。</li>
+<li>除float 、double外的基本类型使用==比较</li>
+<li>对象引用域可以递归调用equals</li>
+<li>对于float,double分别使用Float.compare()，Double.compare()</li>
+<li>数组判等使用Arrays.equals()。</li>
+<li>对于允许null的域，尽可能避免NullPointException，可以做判空操作</li>
+<li>对个域比较的时候，或者比较比较步骤较多的时候，比较顺序从最有可能不一致的开始</li>
+</ol>
+<p><strong>注意点</strong></p>
+<ul>
+<li>覆盖equals的时候总要覆盖hashCode</li>
+<li>不要让equals过于智能。过度的寻求某种不必要的等价关系。</li>
+<li>不要将equals中参数转换成其他类型。某些情况能增加性能，但是比较复杂性会增加（不推荐）。</li>
+</ul>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//本应该是：</span></span><br><span class="line"><span class="keyword">public</span> <span class="literal">void</span> <span class="keyword">equals</span>(Object o)&#123;</span><br><span class="line">  <span class="attr">...</span>.</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//转换参数成其他类型：</span></span><br><span class="line"><span class="keyword">public</span> <span class="literal">void</span> <span class="keyword">equals</span>(MyClass o)&#123;</span><br><span class="line">  <span class="attr">...</span>.</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//加上@Override导致变异不通过，因为父类的equals方法不存在此重写方法。</span></span><br><span class="line">@Override</span><br><span class="line"><span class="keyword">public</span> <span class="literal">void</span> <span class="keyword">equals</span>(MyClass o)&#123;</span><br><span class="line">  <span class="attr">...</span>.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-覆盖equals时总要覆盖hashCode"><a href="#2-覆盖equals时总要覆盖hashCode" class="headerlink" title="2.覆盖equals时总要覆盖hashCode"></a>2.覆盖equals时总要覆盖hashCode</h3><p> <strong>JavaSE6中的Object规范</strong></p>
+<ul>
+<li>程序执行期间，对象的equals方法所用到的比较信息没有被修改，对同一个对象的多次调用hashCode始终如一的返回同一个整数，但是多次执行的过程中，所返回的整数可以不一致（信息修改后）。</li>
+<li>两个对象的equals返回true，那么这两个对象的hashCode返回的整数必须相等。（所以覆盖equals总要覆盖hashCode）</li>
+<li>两个对象的equals返回false，那么不要求两个对象的hashCode返回不一样的整数结果，但是在使用hash的相关集合框架中，返回不一样的结果能提高性能</li>
+</ul>
+<p>HashMap，HashSet等hash集合框架，依赖元素的hashCode进行散列，因此当equals返回true的时候，hashCode返回的结果也一样，可以保证是一个相等的元素。在put ,get,remove等操作均会使用到元素的hashCode。因此hashcode能影响到HashMap等Hash结合框架的性能。</p>
+<p><strong>计算hashcode的一些方法：</strong></p>
+<ul>
+<li>boolean  计算（f?1:0）</li>
+<li>byte,char,short,int 计算(int)f</li>
+<li>long  计算(int)(f^(f&gt;&gt;&gt;32))</li>
+<li>float  计算Float.floatToInBits(f);</li>
+<li>double  计算Double.doubleToLongBits(f),得到的结果再按long类型处理</li>
+<li>对象引用  null则返回0，否则递归调用hashCode</li>
+<li>数组  用以上规则计算每个元素的hashCode，或则使用Arrays.hashCode()</li>
+</ul>
+<p><strong>最后返回将上述计算得到的结果c,（result = 31 * result +c），返回 result。</strong></p>
+<p><strong>注意：散列码计算过程中排除掉冗余域，也就是没有参与到equals中的域</strong></p>
+<blockquote>
+<p>上述使用到了31进行最后结果的处理，因为31有一个很好的特性是可以使用移位和减法来代替乘法。31*i = (i&lt;&lt;5)-i 而且VM会自动完成这种优化。</p>
+</blockquote>
+<p>此外散列码的计算可能是开销很大的，可以考虑懒加载，既是只在第一次调用hashCode的时候进行计算，然后结果保存在实例中，下次直接返回保存的结果。但是前提是类是不可变的。</p>
+<h3 id="3-始终覆盖toString"><a href="#3-始终覆盖toString" class="headerlink" title="3.始终覆盖toString"></a>3.始终覆盖toString</h3><p><strong>Object默认的toString返回的结果是：类名@xxxxxx,其中xxxxxx是该对象的散列码的十六进制表示</strong></p>
+<p>覆盖toString方法可以在调试或者打印对象信息的时候更易于阅读理解。</p>
+<p>但是在该类被广泛使用的时候要保证toString的返回格式的一致性，可利于维护。</p>
+<h3 id="4-谨慎覆盖clone"><a href="#4-谨慎覆盖clone" class="headerlink" title="4.谨慎覆盖clone"></a>4.谨慎覆盖clone</h3><p> 在JavaSE6中的clone方法的通用约定：</p>
+<table>
+<thead>
+<tr>
+<th>x.clone()!=x</th>
+<th>true</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x.clone().getClass() == x.getClass()</td>
+<td>true(不绝对要求如此)</td>
+</tr>
+<tr>
+<td>x.clone().equals(x)</td>
+<td>true(不绝对要求如此)</td>
+</tr>
+</tbody>
+</table>
+<p>​               </p>
+<p><strong>Object中的clone方法是protected的，而一个类实现了Cloneable接口改变了clone的行为，是的clone可以返回一个该对象得到逐域拷贝对象，使得不通过构造器就可以生成一个对象，否则抛出CloneNotSupportedExcetion。</strong></p>
+<p>如果覆盖了非final类的clone方法，则应该返回一个通过super.clone()得到的对象。而对于实现了Cloneable接口的类，如果所有超类否提供了良好的clone实现，那么我们可以在实现了Cloneable的子类实现一个共有的clone的方法，否则我们不应该提供任何clone实现。</p>
+<p>当需要clone的类中存在引用类型且不是final的域的时候，我们仍需要调用该引用对象的clone方法进行clone。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wheel</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> size;</span><br><span class="line">  <span class="keyword">int</span> count;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Wheel <span class="title">clone</span><span class="params">()</span></span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> (Wheel)<span class="keyword">super</span>.clone();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line">  Wheel wheel;</span><br><span class="line">  String name;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Car <span class="title">clone</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">      Car car = (Car)<span class="keyword">super</span>.clone();</span><br><span class="line">      car.wheel = wheel.clone();<span class="comment">//省略这一行，那么car.wheel == this.wheel(浅拷贝)</span></span><br><span class="line">      <span class="keyword">return</span> car;</span><br><span class="line">    &#125;<span class="keyword">catch</span>(CloneNotSupportedException e)&#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> AssertionError();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另一种情况，存在引用链的情况下，我们需要递归的进行复制</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> HashTable <span class="keyword">implements</span> Cloneable&#123;</span><br><span class="line">  <span class="keyword">private</span> Entry[] buckets = .....;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Entry&#123;</span><br><span class="line">    <span class="keyword">final</span> Object key;</span><br><span class="line">    Object value;</span><br><span class="line">    Entry <span class="keyword">next</span>;</span><br><span class="line">    Entry(Object key,Object value,Entry e)&#123;</span><br><span class="line">      ....</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> deepCopy()&#123;</span><br><span class="line">      <span class="comment">//递归调用可能会栈溢出</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Entry(key,value,<span class="keyword">next</span>==<span class="keyword">null</span>?<span class="keyword">null</span>:<span class="keyword">next</span>.deepCopy());</span><br><span class="line">      </span><br><span class="line">      <span class="comment">//使用迭代</span></span><br><span class="line">      Entry e = <span class="keyword">new</span> Entry(key,value,<span class="keyword">next</span>);</span><br><span class="line">      <span class="keyword">for</span>(Entry p = e;p.<span class="keyword">next</span>!=<span class="keyword">null</span>;p=p.<span class="keyword">next</span>)</span><br><span class="line">      	p.<span class="keyword">next</span> = <span class="keyword">new</span> Entry(key,value,p.<span class="keyword">next</span>.<span class="keyword">next</span>);</span><br><span class="line">      <span class="keyword">return</span> e;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  @Override</span><br><span class="line">  <span class="keyword">public</span> HashTable clone()&#123;</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">      </span><br><span class="line">      HashTable ht =(HashTable)<span class="keyword">super</span>.clone();</span><br><span class="line">      <span class="comment">//这样得到的buckets中的元素与this的buckets中的元素时指向同一个对象的（浅拷贝）</span></span><br><span class="line">      <span class="comment">//ht.buckets = buckets.clone();</span></span><br><span class="line">      </span><br><span class="line">      </span><br><span class="line">      <span class="comment">//单独拷贝每个buckets中的链表元素（深拷贝）</span></span><br><span class="line">      ht.buckets = <span class="keyword">new</span> Entry[buckets.length];</span><br><span class="line">      <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>,s=buckets.lenght;i&lt;s;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(buckets[i]!=<span class="keyword">null</span>)&#123;</span><br><span class="line">          ht.buckets[i] = buckets[i].deepCopy();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> ht;</span><br><span class="line">    &#125;<span class="keyword">catch</span>(CloneNotSupportedException e)&#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> AssertionError();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>多线程环境霞需要自己实现同步的clone</strong></p>
+<p>其他实现对象拷贝的方法：</p>
+<p><strong>拷贝构造函器</strong></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">public</span> <span class="selector-tag">Car</span>(Car car)&#123;</span><br><span class="line">  .....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>静态工厂拷贝方法</strong></p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function">Car <span class="title">newInstance</span><span class="params">(Car car)</span></span>&#123;</span><br><span class="line">  ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Java中的使用例子：</p>
+<p>基于接口的拷贝：Collection, Map。HashSet hs = new HashSet(); TreeSet ts = new TreeSet(hs);</p>
+<h3 id="4-考虑实现Comparable接口"><a href="#4-考虑实现Comparable接口" class="headerlink" title="4.考虑实现Comparable接口"></a>4.考虑实现Comparable接口</h3><p>comparable接口属于一个泛型接口，一个类实现了该接口可以和许多依赖该接口的集合实现协作功能，很明显的一个功能就是内在的排序关系。</p>
+<p>Comparable接口中待实现的的方法是compareTo(T t)。返回正整数，0，负整数来表示当前对象大于，等于，小于参数对象。</p>
+<p>compareTo同样应该满足：<strong>自反性，传递性，对称性</strong></p>
+<p>compareTo返回0是，同样应该满足equals返回true</p>
+<p>compareTo需要比较的值域较多是，从最右可能产生不一致的域开始比较，依次类推</p>
+<p>对于float double类型的比较，使用Float.compare() ,Double.compare();</p>
+<p>compareTo与equals的差别是compareTo是参数化的，不必进行参数转化，此外其他的很多equals中的特点同样适用与compareTo。</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Effect-Java/" rel="tag">#Effect Java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/27/打印1到最大的n位数/" rel="next" title="打印1到最大的n位数">
+                <i class="fa fa-chevron-left"></i> 打印1到最大的n位数
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/02/Effect-Java-Note-二/"
+           data-title="Effect Java Note(二)" data-url="dooogo.github.io/2016/12/02/Effect-Java-Note-二/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="dooze" />
+          <p class="site-author-name" itemprop="name">dooze</p>
+          <p class="site-description motion-element" itemprop="description">若无力驾驭，自由便是负担</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1853941987/home?wvr=5" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/donlan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/04c42edcd1bb/latest_articles" target="_blank" title="简书">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对于所有对象都通用的方法"><span class="nav-number">1.</span> <span class="nav-text">对于所有对象都通用的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-覆盖equals时的通用约定"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 覆盖equals时的通用约定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-覆盖equals时总要覆盖hashCode"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.覆盖equals时总要覆盖hashCode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-始终覆盖toString"><span class="nav-number">1.0.3.</span> <span class="nav-text">3.始终覆盖toString</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-谨慎覆盖clone"><span class="nav-number">1.0.4.</span> <span class="nav-text">4.谨慎覆盖clone</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-考虑实现Comparable接口"><span class="nav-number">1.0.5.</span> <span class="nav-text">4.考虑实现Comparable接口</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dooze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"doogo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("Jifv9w6CrxO81MTWtmULGcio-gzGzoHsz", "kF9jN8faS2tHcoa3CHuual6x");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
