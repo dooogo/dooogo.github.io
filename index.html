@@ -300,8 +300,148 @@
             
               
                 
+                <a class="post-title-link" href="/2016/12/10/Effective-Java-Note-类和接口/" itemprop="url">
+                  Effective Java Note(类和接口)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-10T12:32:18+08:00" content="2016-12-10">
+              2016-12-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/10/Effective-Java-Note-类和接口/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/10/Effective-Java-Note-类和接口/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/12/10/Effective-Java-Note-类和接口/" class="leancloud_visitors" data-flag-title="Effective Java Note(类和接口)">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          类和接口一、使类和成员的可访问性最小化 首先我们要了解一个 软件设计基本原则：封装
+模块隐藏所有的实现细节，只通过API进行模块间通信
+为什么要这样设计呢？
+
+有效的接触系统模块之间的耦合：各模块独立开发，测试，优化，使用，理解，修改。
+提高软件的重用性：因为模块基本只依赖所使用的环境
+降低了构建大
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/12/10/Effective-Java-Note-类和接口/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/12/02/Effect-Java-Note-二/" itemprop="url">
-                  Effect Java Note(二)
+                  Effective Java Note(对于所有对象都通用的方法)
                 </a>
               
             
@@ -355,7 +495,7 @@
 
           
           
-             <span id="/2016/12/02/Effect-Java-Note-二/" class="leancloud_visitors" data-flag-title="Effect Java Note(二)">
+             <span id="/2016/12/02/Effect-Java-Note-二/" class="leancloud_visitors" data-flag-title="Effective Java Note(对于所有对象都通用的方法)">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -576,7 +716,7 @@
               
                 
                 <a class="post-title-link" href="/2016/11/26/Effect-Java-Note-一/" itemprop="url">
-                  Effect Java Note(一)
+                  Effective Java Note(对象的创建和销毁)
                 </a>
               
             
@@ -630,7 +770,7 @@
 
           
           
-             <span id="/2016/11/26/Effect-Java-Note-一/" class="leancloud_visitors" data-flag-title="Effect Java Note(一)">
+             <span id="/2016/11/26/Effect-Java-Note-一/" class="leancloud_visitors" data-flag-title="Effective Java Note(对象的创建和销毁)">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -654,10 +794,10 @@
       
         
           
-          Effect Java Note (一)一、对象的创建和销毁1. 考虑使用静态工厂方法替代构造器优点
+          Effect Java Note (对象的创建和销毁)一、对象的创建和销毁1. 考虑使用静态工厂方法替代构造器优点
 
 静态工厂方法可以有一个名称，易于理解与阅读，工厂方法的名称可以凸显出不同构造器的区别
-每次掉用的时候可以不用都创建一个新的对象，而是可以选择复用对象，在一些情况就可以直接使用==判断相等，而不是e
+每次掉用的时候可以不用都创建一个新的对象，而是可以选择复用对象，在一些情况就可以直接使用==判断
           ...
 
           <div class="post-more-link text-center">
@@ -1558,140 +1698,6 @@ a&lt;&lt;b a的二
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/24/ViewStub-源码简解/" itemprop="url">
-                  ViewStub 源码简解
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-24T00:20:01+08:00" content="2016-08-24">
-              2016-08-24
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/24/ViewStub-源码简解/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/24/ViewStub-源码简解/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/08/24/ViewStub-源码简解/" class="leancloud_visitors" data-flag-title="ViewStub 源码简解">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          ViewStubViewStub是一个未加载时不可见的不会占据实际大小的，且可以用来懒加载布局资源的控件。当ViewStub被设置成可见或者是布局资源被inflated，ViewStub就会inflate它自己之中的View或者Views到父布局中。因此，ViewStub使用了setVisibili
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/08/24/ViewStub-源码简解/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1737,7 +1743,7 @@ a&lt;&lt;b a的二
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1754,7 +1760,7 @@ a&lt;&lt;b a的二
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

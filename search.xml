@@ -4,7 +4,239 @@
   
     
     <entry>
-      <title><![CDATA[Effect Java Note(二)]]></title>
+      <title><![CDATA[Effective Java Note(类和接口)]]></title>
+      <url>dooogo.github.io/2016/12/10/Effective-Java-Note-%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3/</url>
+      <content type="html"><![CDATA[<h1 id="类和接口"><a href="#类和接口" class="headerlink" title="类和接口"></a>类和接口</h1><h3 id="一、使类和成员的可访问性最小化"><a href="#一、使类和成员的可访问性最小化" class="headerlink" title="一、使类和成员的可访问性最小化"></a>一、使类和成员的可访问性最小化</h3><p> 首先我们要了解一个 <strong>软件设计基本原则：封装</strong></p>
+<p><strong>模块隐藏所有的实现细节，只通过API进行模块间通信</strong></p>
+<p>为什么要这样设计呢？</p>
+<ul>
+<li>有效的接触系统模块之间的耦合：各模块独立开发，测试，优化，使用，理解，修改。</li>
+<li>提高软件的重用性：因为模块基本只依赖所使用的环境</li>
+<li>降低了构建大型系统的风险：即使整个系统不可用，但是有些独立的模块仍可用</li>
+</ul>
+<p>接下来我们得先了解一下Java提供的访问控制机制：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">访问修饰符</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">private（私有的）</td>
+<td style="text-align:center">只能在声明该成员的的顶层类内部才可以访问，当然包括嵌套内部类</td>
+</tr>
+<tr>
+<td style="text-align:center">package-private（包级私有的，也就是不加修饰符）</td>
+<td style="text-align:center">声明该成员的包内部的任何类都可以访问该成员（这是默认的访问级别）</td>
+</tr>
+<tr>
+<td style="text-align:center">protected（受保护的）</td>
+<td style="text-align:center">声明该成员的类的子类可以访问该成员，声明该成员的包内的任何类均能访问该成员</td>
+</tr>
+<tr>
+<td style="text-align:center">public（共有的）</td>
+<td style="text-align:center">任何地方都能访问该成员</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>可访问性的能力：private &lt; package private &lt; protected &lt; public </p>
+</blockquote>
+<p><strong>规范一：尽可能使得每个类或者成员不被外界访问</strong></p>
+<p>也就是说尽可能的降低成员的可访问性的能力。提供越大的可访问性的能力就必须付出更更多的精力甚至是无法控制的破坏。</p>
+<p>需要注意的是：</p>
+<ol>
+<li>从父类覆盖过来的方法不能将访问性变得更小</li>
+<li>实现接口的时候，实现的方法都是共有的，因为接口中声明的方法默认就是共有的</li>
+<li>做测试的时候可以将私有成员提升到包级私有，但是我们可以让测试作为被测试的包的一部分，从而可以访问到包的私有成员</li>
+</ol>
+<p><strong>受保护的成员如果作为API的一部分，那么我们必须提供支持</strong></p>
+<p><strong>规范二：实例域绝不能是共有</strong></p>
+<p>非final域或者指向可变对象的final引用是共有的就放弃了强制这个对象的不可变的能力。而且被外部随意的访问并修改可能操作意想不到灾难性后果。因为final引用本身不可以改变，但是引用的对象却是可以修改的。</p>
+<p>对于静态域提升为共有的的时候同样会有以上的问题。尤其是 public static final xxx  xxx的域。</p>
+<p>因此： <strong>包含共有可变域的类并不是线程安全的，类具有共有的静态final数组域（也可以是指向可变对象的引用）或者返回这种域的方法几乎总是错误</strong></p>
+<p>常见的处理方法：</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//存在安全漏洞的写法</span><br><span class="line">public <span class="keyword">static</span> final <span class="type">Thing</span>[] <span class="type">VALUES</span> = <span class="meta">&#123;......&#125;</span>;</span><br><span class="line"></span><br><span class="line">//改进方法<span class="number">1</span>：</span><br><span class="line">private <span class="keyword">static</span> final <span class="type">Thing</span>[] <span class="type">PRIVATE_VALUES</span> = <span class="meta">&#123;......&#125;</span>; </span><br><span class="line">public <span class="keyword">static</span> final <span class="type">List</span>&lt;<span class="type">Thing</span>&gt; <span class="type">VALUES</span> = <span class="type">Collections</span>.unmodifiableList(<span class="type">Arrays</span>.asList(<span class="type">PRIVATE_VALUES</span>));</span><br><span class="line"></span><br><span class="line">//改进方法<span class="number">2</span>：</span><br><span class="line">private <span class="keyword">static</span> final <span class="type">Thing</span>[] <span class="type">PRIVATE_VALUES</span> = <span class="meta">&#123;......&#125;</span>; </span><br><span class="line">public <span class="keyword">static</span> final <span class="type">Thing</span>[] values()&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="type">PRIVATE_VALUES</span>.clone();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="二、在共有类中使用方法访问而不是公有域"><a href="#二、在共有类中使用方法访问而不是公有域" class="headerlink" title="二、在共有类中使用方法访问而不是公有域"></a>二、在共有类中使用方法访问而不是公有域</h3><p><strong>这应该是面向对象程序设计的一个准则之一</strong></p>
+<p>我们先来看个例子</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//直接将数据域暴露</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Point</span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">double</span> x;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">double</span> y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//数据域变成私有，提供公有访问方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Point</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">double</span> x;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">double</span> y;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Point</span>(<span class="params"><span class="keyword">double</span> x,<span class="keyword">double</span> y</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.x = x;</span><br><span class="line">    <span class="keyword">this</span>.y = y;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getX</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="comment">//可以做一些逻辑处理，外部使用不用关系内部实现的逻辑，只关注返回的结果</span></span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getY</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setX</span>(<span class="params"><span class="keyword">double</span> x</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.x = x;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setY</span>(<span class="params"><span class="keyword">double</span> y</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.y = y;	</span><br><span class="line">  &#125;</span><br><span class="line"> <span class="comment">//当内部需求有改变的时候在共有访问方法中进行逻辑处理</span></span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有些特例：在包级私有的类中，或者是私有类的嵌套类，直接暴露它的数据域并没有本质的错误</p>
+<p>总结：无论类是可变还是不可变，包级私有还是私有类的嵌套类，我们都应该使用共有方法访问私有数据域，这样可以将危害见到最小。</p>
+<h3 id="三、使可变性最小化"><a href="#三、使可变性最小化" class="headerlink" title="三、使可变性最小化"></a>三、使可变性最小化</h3><p>先来了解一下 <strong>不可变类：每个实例中包含的所有信息都必须在创建该实例的时候提供，并且在对象的整个生命周期内固定不变</strong></p>
+<p>不可变类的一些优点：易于设计、实现、使用。不易出错，更安全。</p>
+<p>成为不可变类的遵循的五个准则：</p>
+<ol>
+<li>不提供任何会改变对象状态的方法</li>
+<li>保证类不会被拓展（防止子类化带来的破坏）</li>
+<li>使所有的域都成为final域（显示强调不可变性）</li>
+<li>使所有的域都成为私有的（防止客户端直接访问数据域或者引用域，使用共有方法进行获取，但是要保证引用域的安全性）</li>
+<li>确保对于任何可变组件的互斥访问（存在可变对象的域的时候，确保客户端使用者无法获取指向这些对象的引且不使用客户端提供的对象引用初始化这样的域，也不从任何方法返回它的引用，考虑使用保护性拷贝）</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Complex</span></span>&#123;  <span class="comment">////final 类不能子类化</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">double</span> re;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">double</span> im;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Complex</span><span class="params">(<span class="keyword">double</span> re,<span class="keyword">double</span> im)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.re = re;</span><br><span class="line">    <span class="keyword">this</span>.im = im;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//另一种防止子类化的方法：</span></span><br><span class="line">  <span class="comment">/*</span><br><span class="line">  private Complex(double re,double im)&#123;</span><br><span class="line">    this.re = re;</span><br><span class="line">    this.im = im;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  public static Complex newInstance(double re,double im)&#123;</span><br><span class="line">    return new Complex(re,im);</span><br><span class="line">  &#125;</span><br><span class="line">  */</span></span><br><span class="line">  <span class="comment">//共有方法获取数据域，但是没有显示提供修改数据的方法</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">realPart</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> re;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">imaginaryPart</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> im;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//每次操作都会返回一个新的不可变对象</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Complex <span class="title">add</span><span class="params">(Complex c)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Complex(re + c.re, im + c.im);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从以上可以得到一个不可变类的特性： <strong>不可变对象本质是线程安全的，不要求同步，且可以被自由的共享</strong></p>
+<p>因为可以被自由的共享，我们可以将频繁使用的实例提供静态final常量: </p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Complex ZERO = <span class="keyword">new</span> Complex(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Complex ONE = <span class="keyword">new</span> Complex(<span class="number">1</span>,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>而且不需要进行保护性拷贝（前提是没有存在指向对象的引用域），也不应该提供clone方法。</p>
+<p><strong>除了共享对象本身，对象内的信息也可能被共享</strong></p>
+<p>例如：BigInteger中用一个int表示符号位，一个int[]表示数值，negate方法只是改变符号为的int，而数值指向同一个int[]，但是可以表示正负两个数。</p>
+<p>因为每种状态都需要一个不可变的对象实例，但是对象的反复创建是有性能代价的，尤其是一个步骤中可能需要很多不同数值的对象，但是步骤结束都将被废弃。所以可以使用静态工厂方法代替构造器，同时对频繁使用的对象进行缓存，避免重复生成。因此不可变的最大缺点就是： <strong>对于每个不同的值都需要一个单独的对象</strong></p>
+<p>对于依赖BigInteger和BigDecimal，因为他们的方法有可能被覆盖，所以不可变类中包含他们的话要提供保护性拷贝：</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> BigInteger safeInstance(BigInstance <span class="keyword">val</span>)&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">val</span>.getInstance != BigInteger.<span class="keyword">class</span>)</span><br><span class="line">  	<span class="keyword">return</span> <span class="keyword">new</span> BigInteger(<span class="keyword">val</span>.toByteArray());</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">val</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于前面提及的五个不可变类的准则，可以适当放松，例如不可变类中存在一个或者多个非final域提供缓存设计功能的实现，进而减少高昂的开销。</p>
+<p>对于实现了Serializable接口且不可变类中含有指向可变对象的域，那么需要提供readObject,readResolve或者使用ObjectOutputStream.readUnshared 和ObjectOutputStream.writeUnshared ,避免存在攻击者从不可变类构建可变实例。</p>
+<p>总结：<strong>如果类不可能设计成不可变类，那也应该尽可能限制它的可变性。同时需要权衡不可变类与性能要求。</strong></p>
+<h3 id="四、复合优于继承"><a href="#四、复合优于继承" class="headerlink" title="四、复合优于继承"></a>四、复合优于继承</h3><p><strong>集成作为实现代码重用的有力手段，但是也破坏了封装性</strong></p>
+<p>继承带来的缺点是：</p>
+<ul>
+<li>子类依赖于父类的特定功能实现细节，父类的改变可能会破坏子类，使得子类非常脆弱。</li>
+<li>对于override动作，后期的演变过程可能存在一下问题：<ol>
+<li>后续在父类提供了一个新方法，而子类又添加了一个方法名与参数一致而返回类型不一致的方法，会导致编译错误</li>
+<li>子类新提供的方法与父类方法形成覆盖，前期是访问父类的方法，现在就会访问子类覆盖父类的方法，如果两种实现并不一致，将可能导致错误。</li>
+</ol>
+</li>
+</ul>
+<p>为了避免上述的问题可以考虑使用 <strong>复合</strong> 而不是继承。</p>
+<p>复合是将一个类作为新类的组件，实际表现就是新类的一个域。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//此处ForwardingSet仅是作为一个包装类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ForwardingSet</span>&lt;<span class="title">E</span>&gt; <span class="title">implement</span> <span class="title">Set</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Set&lt;E&gt; set;  <span class="comment">//复合：将正真操作数据的Set最为封装类的一个组件（域）</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">ForwardingSet</span><span class="params">(Set&lt;E&gt; set)</span></span>&#123; </span><br><span class="line">    <span class="keyword">this</span>.set = set;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>&#123; <span class="function"><span class="keyword">return</span> set.<span class="title">add</span><span class="params">(e)</span></span>;&#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? <span class="keyword">extends</span> E&gt; c)</span></span>&#123; <span class="function"><span class="keyword">return</span> set.<span class="title">addAll</span><span class="params">(c)</span></span>;&#125;</span><br><span class="line">  <span class="comment">//....省略了其他的实现Set接口的方法，实质也是同上面的add方法一样，只是直接调用set的对应方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//一个可以返回添加到Set中的元素的总数的类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountSet</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">ForwardingSet</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">//此处的特点是将其他任何Set的实现封装成一个可以对添加的元素计数的Set</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">CountSet</span><span class="params">(Set&lt;E&gt; set)</span></span>&#123;</span><br><span class="line">	<span class="keyword">super</span>(s);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span> <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="function"><span class="keyword">return</span> <span class="keyword">super</span>.<span class="title">add</span><span class="params">(e)</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span> <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? <span class="keyword">extends</span> E&gt; c)</span></span>&#123;</span><br><span class="line">    count+=c.size();</span><br><span class="line">    <span class="function"><span class="keyword">return</span> <span class="keyword">super</span>.<span class="title">addAll</span><span class="params">(c)</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>以上我们需要注意的是ForwardingSet作为包装类，使用了Decorator（装饰者）模式，而不是Delegation（委托）模式，委托模式的一个特点时将包装对象本身传递给被包装的对象。</p>
+</blockquote>
+<p>此外需要注意的是被包装的对象（上面的示例时Set）不适合在回调框架中使用，因为回调把被包装对象本身的引用传递给其他对象，后续调用引用会造成，越过封装类的实现。</p>
+<p>总结：</p>
+<ul>
+<li>只有确实存在“is-a”关系，也就是子类正真是父类的子类型（从概念与逻辑上），才适合继承，否则应该使用复合。</li>
+<li>如果子类与父类在不同的包中，且父类并不是为了继承而设计，会暴露继承的脆弱性（参考上述关于继承的缺点）。</li>
+</ul>
+<h3 id="五、要么为了继承而设计，并提供文档，要么就禁止继承"><a href="#五、要么为了继承而设计，并提供文档，要么就禁止继承" class="headerlink" title="五、要么为了继承而设计，并提供文档，要么就禁止继承"></a>五、要么为了继承而设计，并提供文档，要么就禁止继承</h3><p>为了继承而设计的类提供文档说明，这样的文档是：精确描述覆盖方法所带来的影响，也就是明确它可覆盖的方法的自用性。对于构造器或者共有、受保护的的方法指明对可覆盖方法的使用情况，以及带来的影响。</p>
+<ul>
+<li>为了继承而设计类的时候，考虑应该暴露那些受保护的方法或者域（唯一方法就是多编写子类测试，是否出现难以使用或者出现安全问题等）</li>
+<li>对于将要发布的为了继承而设计的类，自用模式以及受保护的方法和域中隐含的实现都是对外（类使用者）有永久承诺的。因此后期对其进行性能提升等改进都会时比较困难的。（唯一办法还是编写子类测试）</li>
+<li>构造器不能调用可覆盖的方法，无论是直接还是间接的调用。（因为子类覆盖的方法会在子类构造器运行之前被调用，前提时构造器中对该方法有调用）</li>
+<li>为了继承而设计的类需要实现Cloneable、Serializable接口的时候，clone(),readObject()相当于构造器，因此不能在clone(),readObject()中调用可覆盖的方法，无论是直接还是间接的调用。</li>
+<li>对于普通类不需要被安全的子类化，那么就禁止子类化（1. final类；2.私有构造器；3.提供静态工厂方法替代构造器）</li>
+<li>某些情况禁止普通类进行继承可能会为使用带来许多不便，此时应该保证这些类能消除可覆盖方法的自用性带来的影响（可以将可覆盖方法的代码逻辑移到私有辅助方法中，覆盖方法调用对应的自由辅助方法）</li>
+</ul>
+<h3 id="六、接口优于抽象类"><a href="#六、接口优于抽象类" class="headerlink" title="六、接口优于抽象类"></a>六、接口优于抽象类</h3><p>先来了解一下接口与抽象类的联系与区别：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">接口</th>
+<th style="text-align:center">抽象类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">所有方法都是未实现的</td>
+<td style="text-align:center">可以同时存在未实现方法和实现方法</td>
+</tr>
+<tr>
+<td style="text-align:center">可继承（public interface A extends B,C,D）</td>
+<td style="text-align:center">可继承，如果继承类未实现所有抽象方法，那么该类必须仍然是抽象类</td>
+</tr>
+<tr>
+<td style="text-align:center">属性域默认时public final 的</td>
+<td style="text-align:center">属性域与普通类一样</td>
+</tr>
+<tr>
+<td style="text-align:center">可以同时implement多个接口</td>
+<td style="text-align:center">智能通过extends实现单继承</td>
+</tr>
+<tr>
+<td style="text-align:center">不存在构造器</td>
+<td style="text-align:center">存在构造器</td>
+</tr>
+</tbody>
+</table>
+<p>此外JDK 1.8中interface中允许有默认方法，也就是实现类如果不提供实现逻辑，将使用interface中默认的实现逻辑</p>
+<p>接口与抽象类的一个重要区别是： <strong>为实现抽象类定义的类型，类必须成为抽象类的子类，而实现接口的类只需要实现接口所有定义的抽象方法，且不存在类的层次限制</strong></p>
+<p> 因此接口带来的好处是：</p>
+<ul>
+<li><p>现有类可以很容易的实现更新，通过实现新的接口</p>
+<p>例如实现Comparable接口让类可以轻松的在结合框架中使用排序的功能，限于抽象类的单继承的限制，通过抽象类实现新加功能会破坏类的层级性</p>
+</li>
+<li><p>接口是定义混合类型的理想选择</p>
+<p>例如实现Comparable接口的不同类之间可以进行比较，而对于抽象类而言很难找到适合的地方让不同的类都继承同一个抽象类</p>
+</li>
+<li><p>接口允许我们构造非层次结构的类型框架</p>
+<p>对于一个类需要实现多种功能，或者不同的类需要实现其中几种功能，而每个功能有一个接口进行约束。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Songer</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">song</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SongWriter</span></span>&#123;</span><br><span class="line">  <span class="function">Song <span class="title">writeSong</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line">pulbic <span class="class"><span class="keyword">interface</span> <span class="title">SongerWriter</span> <span class="keyword">extends</span> <span class="title">Songer</span>,<span class="title">SongWrite</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">act</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在JDK 1.8之前interface不提供默认方法，我们可以提供一个骨架抽象实现（实际上是一个实现了部分主要接口方法的抽象类）。例如Java集合框架中的AbstractList等。骨架实现类时相对比较简单的实现，确定那些时最基本的方法，然后其他的方法提供默认实现。需要注意的是骨架实现类是要被继承的，所以同样要注意继承带来的问题，并提供良好的文档。</p>
+<p>然而接口同样存在着痛点：<strong>在版本演变中很难通过新添加接口方法进行功能添加，但是抽象类可以很轻松搞定这种事</strong>，因此发布的接口在发布之前就应该通过严密的测试。因为一个接口发布出去并被广泛使用后，对其进行修改几乎时不可能的。</p>
+<h3 id="七、接口只适用于定义类型"><a href="#七、接口只适用于定义类型" class="headerlink" title="七、接口只适用于定义类型"></a>七、接口只适用于定义类型</h3><p>当接口被类实现之后，该接口就充当可以应用该类实例的类型。例如：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; strList = <span class="keyword">new</span> ArrayList();</span><br><span class="line">strList.add(<span class="string">"bug"</span>);</span><br></pre></td></tr></table></figure>
+<p>另一种特殊情况就是 <strong>常量接口</strong>，这种接口仅包含常量而没有其他的抽象方法。</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">EarthConstants</span></span>&#123;</span><br><span class="line">  <span class="keyword">double</span> EARTH_RADIUS = XXXXX.XXXXX;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是这是一种不良接口，会导致使用者对接口含义的模糊，而且使用选择了实现该接口，那么后续不在需要这些常量的时候，我们不能删除该接口。</p>
+<p>对于常量的定义，如果和类或者关系接口很密切，可以使用工具类来定义：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">EarthConstants</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">EarthConstants</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">double</span> EARTH_RADIUS = XXXXX.XXXXX;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="八、类层次优于标签类"><a href="#八、类层次优于标签类" class="headerlink" title="八、类层次优于标签类"></a>八、类层次优于标签类</h3><p>首先我们看一下下面的标签类:</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Figure&#123;</span><br><span class="line"><span class="comment">//枚举类型作为标签</span></span><br><span class="line">  <span class="keyword">enum</span> Shape&#123;RECTANGLE,CIRCLE&#125;;</span><br><span class="line">  <span class="keyword">final</span> Shape <span class="built_in">shape</span>;</span><br><span class="line">  <span class="comment">//Rectangle使用</span></span><br><span class="line">  <span class="keyword">double</span> lenght;</span><br><span class="line">  <span class="keyword">double</span> <span class="built_in">width</span>;</span><br><span class="line">  <span class="comment">//Circle使用</span></span><br><span class="line">  <span class="keyword">double</span> radius;</span><br><span class="line">  <span class="comment">//通过不同的构造函初始化不一样的类型</span></span><br><span class="line">  Figure(<span class="keyword">double</span> radius)&#123;</span><br><span class="line">    <span class="built_in">shape</span> = Shape.CIRCLE;</span><br><span class="line">    <span class="keyword">this</span>.radius = radius;</span><br><span class="line">  &#125;</span><br><span class="line">  Figure(<span class="keyword">double</span> <span class="built_in">width</span>,<span class="keyword">double</span> length)&#123;</span><br><span class="line">    <span class="built_in">shape</span> = Shape.RECTANGLE;</span><br><span class="line">    <span class="keyword">this</span>.<span class="built_in">width</span> = <span class="built_in">width</span>;</span><br><span class="line">    <span class="keyword">this</span>.length = length;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//根据标签计算图形的面积</span></span><br><span class="line">  <span class="keyword">double</span> area()&#123;</span><br><span class="line">    <span class="keyword">switch</span>(<span class="built_in">shape</span>)&#123;</span><br><span class="line">      <span class="keyword">case</span> Shape.CIRCLE:</span><br><span class="line">      	<span class="keyword">return</span> Math.<span class="literal">PI</span> * radius * radius;</span><br><span class="line">      <span class="keyword">case</span> Shape.RECTANGLE:</span><br><span class="line">      	<span class="keyword">return</span> <span class="built_in">width</span> * length;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上的这个标签类仅是设置了两个标签，但是可以发现其中充斥者样板代码，而且会有很多判断语句，标签域。此外数据域。如果标签很多的时候构造器可能相互会很近似，易导致出错。总的来说就是标签类会导致： <strong>代码冗长。容易出错，且效率低下</strong></p>
+<p>而变换成类层次后：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Shape</span></span>&#123;</span><br><span class="line">  abstact double area();</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> <span class="keyword">extends</span> <span class="title">Shape</span></span>&#123;</span><br><span class="line">  <span class="keyword">final</span> double width;</span><br><span class="line">  <span class="keyword">final</span> double length;</span><br><span class="line">  public <span class="type">Rectangle</span>(double width,double length)&#123;</span><br><span class="line">    <span class="keyword">this</span>.width = width;</span><br><span class="line">    <span class="keyword">this</span>.length = length;</span><br><span class="line">  &#125;</span><br><span class="line">  public double area()&#123;</span><br><span class="line">    <span class="keyword">return</span> width * lenght;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Circle</span> <span class="keyword">extends</span> <span class="title">Shape</span></span>&#123;</span><br><span class="line">  <span class="keyword">final</span> double radius;</span><br><span class="line">  pulbic <span class="type">Circle</span>(double radius)&#123;</span><br><span class="line">    <span class="keyword">this</span>.radius = radius;</span><br><span class="line">  &#125;</span><br><span class="line">  public double area()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="type">Math</span>.<span class="type">PI</span> * radius * radius;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>类层次使得类型之间的关系更明了,<strong>层次结构清晰</strong>，特定类型只含有需要的数据域，另一个好处就是更加<strong>便于拓展</strong>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Rectangle</span></span>&#123;</span><br><span class="line">  public <span class="type">Square</span>(doubel side)&#123;</span><br><span class="line">    <span class="keyword">super</span>(side,side);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="九、用函数对象表示策略"><a href="#九、用函数对象表示策略" class="headerlink" title="九、用函数对象表示策略"></a>九、用函数对象表示策略</h3><p> 在C语言中可以通过函数的参数可以是一个指向函数的指针，该指针可以完成一些特定的策略，而在Java中可以通过对象引用实现类似的功能。</p>
+<p>我们可以看一下Java.Util中的Comparator接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> intarface Comparator&lt;T&gt;&#123;</span><br><span class="line"><span class="comment">//接收两个泛型参数，返回一个整型，t1&gt;t2返回大于0的整数，t1==t2返回0，t1&lt;t2返回小于0的整数</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compara</span><span class="params">(T t1,T t2)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="keyword">int</span> arr[] = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;....&#125;;</span><br><span class="line">Arrays.sort(arr,<span class="keyword">new</span> Comparator&lt;Integer&gt;()&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compara</span><span class="params">(Integer i1,Integer i2)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ....<span class="comment">//实现具体的策略逻辑</span></span><br><span class="line">  &#125; </span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//上面使用匿名内部类的方式生成一个策略，那么每次调用都会新生成一个新的实例</span></span><br><span class="line"><span class="comment">//对于重复执行的策略，可以将其保存为一个静态域。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Host</span></span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntCmp</span> <span class="title">implement</span>&lt;<span class="title">Integer</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compara</span><span class="params">(Integer i1,Integer i2)</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> ....;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Comparator&lt;Integer&gt; INT_COMPARATOR = <span class="keyword">new</span> IntCmp();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Arrays.sort(arr,Host.INT_COMPARATOR);</span><br></pre></td></tr></table></figure>
+<h3 id="十、优先考虑静态成员类"><a href="#十、优先考虑静态成员类" class="headerlink" title="十、优先考虑静态成员类"></a>十、优先考虑静态成员类</h3><p>首先理解<strong>嵌套类（nested class）</strong>的概念：定义在另一个类内部的类，它的目的时为它的外围类提供服务。</p>
+<p>嵌套类的种类：静态成员类（static member class）、非静态成员类（nonstatic member class）、匿名类（anonymous class）、局部类（local class）。</p>
+<blockquote>
+<p>除了静态内部类外其他三种都称为内部类（inner class）</p>
+</blockquote>
+<ul>
+<li><p>静态成员类</p>
+<ol>
+<li>能访问外部类的所有成员</li>
+<li>属于外部类的一个静态成员，遵守类静态成员的访问规则（private则只能在外部类的内部使用）</li>
+<li>不持有外部类的实例</li>
+<li>不能直接调用外部类的非静态方法</li>
+<li>常用做为公有的辅助类</li>
+</ol>
+</li>
+<li><p>非静态成员类</p>
+<ol>
+<li>每个非静态内部类持有一个外部类的实例（外部类调用非静态成员类的构造器的时候建立实例关联关系）</li>
+<li>可以直接调用外部类的方法</li>
+<li>常见用法是：定义一个Adapter，他允许外部类的实例被看作是另一个不相关的类的实例。例如Map中的KeySet、entrySet</li>
+<li>应为每个非静态成员类都与外部类的一个实例关联，可能导致外部类实例符合垃圾回收却仍需要保留着</li>
+<li>非静态成员类如果是导出的API的一部分，那么后续将不可以修改成静态成员类</li>
+</ol>
+</li>
+<li><p>匿名类</p>
+<ol>
+<li>没有类名，不能使用继承，实现接口等特性</li>
+<li>只有在使用的时候才会初始化，并与外部类实例建立联系</li>
+<li>可以出现在代码中的任何允许表达式出现地方</li>
+<li>必须保持简短才能保证程序良好的阅读性</li>
+<li>常见使用：创建对象过程：Thead、Runnable,静态工厂方法内部</li>
+</ol>
+</li>
+<li><p>局部类</p>
+<ol>
+<li><p>任何可以声明局部变量的地方都可声明局部类</p>
+</li>
+<li><p>同样遵循作用域的规则</p>
+</li>
+<li><p>与成员类类似，右类名，可以被重复使用</p>
+</li>
+<li><p>只有在非静态环境中使用才会与外部类实例关联</p>
+</li>
+<li><p>不能包含静态成员</p>
+<p>​</p>
+</li>
+</ol>
+</li>
+</ul>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Effective Java Note(对于所有对象都通用的方法)]]></title>
       <url>dooogo.github.io/2016/12/02/Effect-Java-Note-%E4%BA%8C/</url>
       <content type="html"><![CDATA[<h1 id="对于所有对象都通用的方法"><a href="#对于所有对象都通用的方法" class="headerlink" title="对于所有对象都通用的方法"></a>对于所有对象都通用的方法</h1><h3 id="1-覆盖equals时的通用约定"><a href="#1-覆盖equals时的通用约定" class="headerlink" title="1. 覆盖equals时的通用约定"></a>1. 覆盖equals时的通用约定</h3><p><strong>equals所期望的结果</strong></p>
 <ul>
@@ -135,9 +367,9 @@
     </entry>
     
     <entry>
-      <title><![CDATA[Effect Java Note(一)]]></title>
+      <title><![CDATA[Effective Java Note(对象的创建和销毁)]]></title>
       <url>dooogo.github.io/2016/11/26/Effect-Java-Note-%E4%B8%80/</url>
-      <content type="html"><![CDATA[<h1 id="Effect-Java-Note-一"><a href="#Effect-Java-Note-一" class="headerlink" title="Effect Java Note (一)"></a>Effect Java Note (一)</h1><h3 id="一、对象的创建和销毁"><a href="#一、对象的创建和销毁" class="headerlink" title="一、对象的创建和销毁"></a>一、对象的创建和销毁</h3><h4 id="1-考虑使用静态工厂方法替代构造器"><a href="#1-考虑使用静态工厂方法替代构造器" class="headerlink" title="1. 考虑使用静态工厂方法替代构造器"></a>1. 考虑使用静态工厂方法替代构造器</h4><p><strong>优点</strong></p>
+      <content type="html"><![CDATA[<h1 id="Effect-Java-Note-对象的创建和销毁"><a href="#Effect-Java-Note-对象的创建和销毁" class="headerlink" title="Effect Java Note (对象的创建和销毁)"></a>Effect Java Note (对象的创建和销毁)</h1><h3 id="一、对象的创建和销毁"><a href="#一、对象的创建和销毁" class="headerlink" title="一、对象的创建和销毁"></a>一、对象的创建和销毁</h3><h4 id="1-考虑使用静态工厂方法替代构造器"><a href="#1-考虑使用静态工厂方法替代构造器" class="headerlink" title="1. 考虑使用静态工厂方法替代构造器"></a>1. 考虑使用静态工厂方法替代构造器</h4><p><strong>优点</strong></p>
 <ol>
 <li>静态工厂方法可以有一个名称，易于理解与阅读，工厂方法的名称可以凸显出不同构造器的区别</li>
 <li>每次掉用的时候可以不用都创建一个新的对象，而是可以选择复用对象，在一些情况就可以直接使用==判断相等，而不是equals</li>
@@ -1699,14 +1931,14 @@ this.swap(int a[],int a,int b);
     </entry>
     
     <entry>
-      <title></title>
-      <url>dooogo.github.io/links/index.html</url>
+      <title><![CDATA[tags]]></title>
+      <url>dooogo.github.io/tags/index.html</url>
       <content type="html"></content>
     </entry>
     
     <entry>
-      <title><![CDATA[tags]]></title>
-      <url>dooogo.github.io/tags/index.html</url>
+      <title></title>
+      <url>dooogo.github.io/links/index.html</url>
       <content type="html"></content>
     </entry>
     
